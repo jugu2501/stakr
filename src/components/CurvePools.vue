@@ -12,10 +12,10 @@
   [Axl-Dc]&nbsp;
   poly:{{getAxlPrice('poly')}}&nbsp;&nbsp; 
   <a :style=checkAvxPool()>avx:{{getAxlPrice('avx')}}</a>&nbsp;&nbsp;
-  ftm:{{getAxlPrice('ftm')}}&nbsp;&nbsp; 
+  ar:{{getAxlPrice('sushi')}}&nbsp;&nbsp;
+  ftm:{{Math.round(getAxlPrice('ftm')/1000)}}k&nbsp;&nbsp; 
 <!--  celo:{{getAxlPrice('celo')}}&nbsp;&nbsp;
   ar:{{getAxlPrice("ar")}} -->
-  ar:{{getAxlPrice('sushi')}}
 </div>
 </template>
 

@@ -20,8 +20,11 @@
       <CurvePools ref="curve_pools"/>
       [DcRate] p: <a class="div_cr">{{aaveRate.pUsdc}}%</a> ar: <a class="div_cr">{{aaveRate.arUsdc}}%</a> op: <a class="div_cr">{{aaveRate.opUsdc}}%</a><br>
       [DtRate] p: <a class="div_cr">{{aaveRate.pUsdt}}%</a> ar: <a class="div_cr">{{aaveRate.arUsdt}}%</a> op: <a class="div_cr">{{aaveRate.opUsdt}}%</a><br>
+      [Eth Rate] p2: <a class="div_cr">{{aaveRate.p2Eth}}%</a> p: <a class="div_cr">{{aaveRate.pEth}}%</a> ar: <a class="div_cr">{{aaveRate.arEth}}%</a><br>
       [ATOM Fee] <a class="s_red">{{atomFee}}%</a><br>
-      [BCH Fee] <a class="s_red">{{bchFee}}%</a><br>
+      [ETH Fee] <a class="s_red">{{ethFee}}%</a><br>
+      [BNB Fee] <a class="s_red">{{bnbFee}}%</a><br>
+<!--      [BCH Fee] <a class="s_red">{{bchFee}}%</a><br>-->
 <!--
       [USDC Fee] <a class="div_cr">{{usdcFee}}%</a><br>
       [Ku-USDC Fee] <a class="div_cr">{{usdcFee_ku}}%</a><br>
@@ -60,38 +63,39 @@
       <br><br>
       [stOS] pre25: {{st_osmo_pre}}&nbsp;&nbsp;rdm: {{osmo_redeem}}&nbsp;&nbsp;22.07%<br>
       &nbsp;osm: {{st_osmo}}&nbsp;&nbsp;<a class="s_red">{{st_osmo_div}}%</a>&nbsp;&nbsp;<a :href="genLink(833)" target="_blank" class="div_ju">{{st_osmo_div2}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;{{calStakeRevenue('osmo')}}%
+      <br><br>
+      [<a href="https://info.osmosis.zone/token/MARS" target="_blank">Mars</a>]&nbsp; {{mars_info}}&nbsp;&nbsp;&nbsp;&nbsp;
+      [<a href="https://info.osmosis.zone/token/STRD" target="_blank">Strd</a>]&nbsp; {{strd_info}}
       <br>
+      [<a href="https://info.osmosis.zone/token/LIKE" target="_blank">Like</a>]&nbsp; {{like_info}}&nbsp;&nbsp;&nbsp;&nbsp;
+      [Ion]&nbsp; {{ion_info}}
     </div>
-    <div class="omo_block"><br>
+    <div class="omo_block">
       <SimpPrice ref="wbtc" symbol="WBTC" :priceData="price" :base="'cex'" :compare="'osm'"></SimpPrice>
       <SimpPrice ref="weth" symbol="WETH" :priceData="price" :base="'cex'" :compare="'osm'"></SimpPrice><br>
       <SimpPrice ref="atom" symbol="ATOM" :priceData="price" :base="'cex'" :compare="'osm'"></SimpPrice>
       <SimpPrice ref="atom" symbol="ATOM" :priceData="price" :base="'osm'" :compare="'cr'"></SimpPrice><br>
       <SimpPrice ref="osmo" symbol="OSMO" :priceData="price" :base="'cex'" :compare="'osm'"></SimpPrice>
 <!--
-      <SimpPrice ref="wbnb" symbol="wBNB" :priceData="price" :base="'cex'" :compare="'osm'"></SimpPrice>
-      <SimpPrice ref="wmatic" symbol="wMATIC" :priceData="price" :base="'cex'" :compare="'osm'"></SimpPrice>
+      <SimpPrice ref="bnb" symbol="BNB" :priceData="price" :base="'cex'" :compare="'osm'"></SimpPrice>
+      <SimpPrice ref="matic" symbol="MATIC" :priceData="price" :base="'cex'" :compare="'osm'"></SimpPrice>
+      <SimpPrice ref="kava" symbol="KAVA" :priceData="price" :base="'cex'" :compare="'osm'"></SimpPrice>
 -->
-      <SimpPrice ref="kava" symbol="KAVA" :priceData="price" :base="'cex'" :compare="'kv'"></SimpPrice>
       <SimpPrice ref="scrt" symbol="SCRT" :priceData="price" :base="'cex'" :compare="'osm'"></SimpPrice>
+      <SimpPrice ref="inj" symbol="INJ" :priceData="price" :base="'cex'" :compare="'osm'"></SimpPrice>
+      <SimpPrice ref="fet" symbol="FET" :priceData="price" :base="'cex'" :compare="'osm'"></SimpPrice>
       <br>
       [<a href="https://www.coingecko.com/zh-tw/數字貨幣/radiant-capital" target="_blank">Rdnt</a>]&nbsp; {{rdnt_bn}}&nbsp;&nbsp;&nbsp;&nbsp;
       [<a href="https://www.coingecko.com/zh-tw/數字貨幣/pancakeswap" target="_blank">Cake</a>]&nbsp; {{cake_bn}}
-      <br>
-      [<a href="https://info.osmosis.zone/token/MARS" target="_blank">Mars</a>]&nbsp; {{mars_info}}&nbsp;&nbsp;&nbsp;&nbsp;
-      [<a href="https://info.osmosis.zone/token/STRD" target="_blank">Strd</a>]&nbsp; {{strd_info}}
       <br>
       [Doge]&nbsp; {{doge_bn}}&nbsp;&nbsp;&nbsp;&nbsp;
       [Bch]&nbsp; {{bch_bn}}
       <br>
       [Arb]&nbsp; {{arb_bn}}&nbsp;&nbsp;&nbsp;&nbsp;
       [Dydx]&nbsp; {{dydx_bn}}
-      <br><br>
-      [<a href="https://info.osmosis.zone/token/LIKE" target="_blank">Like</a>]&nbsp; {{like_info}}&nbsp;&nbsp;&nbsp;&nbsp;
-      [Ion]&nbsp; {{ion_info}}
       <br>
-      [Agix]&nbsp; {{agix_bn}}&nbsp;&nbsp;&nbsp;&nbsp;
-      [Fet]&nbsp; {{fet_bn}}
+      [Xvs]&nbsp; {{xvs_bn}}&nbsp;&nbsp;&nbsp;&nbsp;
+      [Bnb]&nbsp; {{price.bnb.cex}}
       <br><br><br>
     </div>
   </div> 
@@ -123,7 +127,7 @@ export default {
       bShowNotice: true,
       bBusdWithdrawNotice: false,
       bStNotice: true,
-      bAxlNotice: true,
+      bAxlNotice: false,
       bRateNotice: false,
       bFetchPre25: false,
       bUpdateMaxDc: true,
@@ -134,10 +138,12 @@ export default {
         juno: {osm: 1, ju: 1},
         wbtc: {osm: 1, cex: 1},
         weth: {osm: 1, cex: 1},
-        wbnb: {osm: 1, cex: 1},
-        wmatic: {osm: 1, cex: 1},
-        kava: {kv: 1, cex: 1},
+        bnb: {osm: 1, cex: 1},
+        matic: {osm: 1, cex: 1},
+        kava: {osm: 1, kv: 1, cex: 1},
         scrt: {osm: 1, cex: 1},
+        inj: {osm: 1, cex: 1},
+        fet: {osm: 1, cex: 1},
       },
       
       doge_bn: 1,
@@ -150,10 +156,11 @@ export default {
       dydx_bn: 1,
       rdnt_bn: 1,
       cake_bn: 1,
-      agix_bn: 1,
-      fet_bn: 1,
+      xvs_bn: 1,
       
       atomFee: 1,
+      ethFee: 1,
+      bnbFee: 1,
       bchFee: 1,
       usdcFee: 1,
       usdcFee_ku: 1,
@@ -266,10 +273,10 @@ export default {
       if(Math.abs(this.$refs.osmo.getDiv('osm', 'cex')) > 2) {
         this.notice('OSMO go!!', 567)
       } 
-//      if(Math.abs(this.$refs.wbnb.getDiv('osm', 'cex')) > 2) {
+//      if(Math.abs(this.$refs.bnb.getDiv('osm', 'cex')) > 2) {
 //        this.notice('BNB go!!', 567)
 //      }
-//      if(Math.abs(this.$refs.wmatic.getDiv('osm', 'cex')) > 2) {
+//      if(Math.abs(this.$refs.matic.getDiv('osm', 'cex')) > 2) {
 //        this.notice('MATIC go!!', 567)
 //      } 
       if(this.bRateNotice && (this.atomFee < 0 || this.usdcRate > 3)) {
@@ -302,9 +309,9 @@ export default {
         Math.round(res.data.find(a=> a.symbol == 'BTCUSDT').price)
       this.price.weth.cex =
         Math.round(res.data.find(a=> a.symbol == 'ETHUSDT').price * 10) / 10
-      this.price.wbnb.cex =
+      this.price.bnb.cex =
         Math.round(res.data.find(a=> a.symbol == 'BNBUSDT').price * 100) / 100
-      this.price.wmatic.cex =
+      this.price.matic.cex =
         Math.round(res.data.find(a=> a.symbol == 'MATICUSDT').price * 10000) / 10000
       this.price.kava.cex =
         Math.round(res.data.find(a=> a.symbol == 'KAVAUSDT').price * 10000)
@@ -328,16 +335,22 @@ export default {
         Math.round(res.data.find(a=> a.symbol == 'RDNTUSDT').price * 10000) / 10000
       this.cake_bn =
         Math.round(res.data.find(a=> a.symbol == 'CAKEUSDT').price * 1000) / 1000
-      this.agix_bn =
-        Math.round(res.data.find(a=> a.symbol == 'AGIXUSDT').price * 1000) / 1000
-      this.fet_bn =
-        Math.round(res.data.find(a=> a.symbol == 'FETUSDT').price * 1000) / 1000
+      this.price.inj.cex =
+        Math.round(res.data.find(a=> a.symbol == 'INJUSDT').price * 1000) / 1000
+      this.price.fet.cex =
+        Math.round(res.data.find(a=> a.symbol == 'FETUSDT').price * 10000) / 10000
+      this.xvs_bn =
+        Math.round(res.data.find(a=> a.symbol == 'XVSUSDT').price * 1000) / 1000
     },
     resAtomFee(res) {
       let atomObj = res.data.find(a => 'ATOMUSDT' == a.symbol)
+      let ethObj = res.data.find(a => 'ETHUSDT' == a.symbol)
+      let bnbObj = res.data.find(a => 'BNBUSDT' == a.symbol)
       let bchObj = res.data.find(a => 'BCHUSDT' == a.symbol)
       let usdcObj = res.data.find(a => 'USDCUSDT' == a.symbol)
       this.atomFee = Math.round(atomObj.lastFundingRate * 10000000000) / 100000000
+      this.ethFee = Math.round(ethObj.lastFundingRate * 10000000000) / 100000000
+      this.bnbFee = Math.round(bnbObj.lastFundingRate * 10000000000) / 100000000
       this.bchFee = Math.round(bchObj.lastFundingRate * 10000000000) / 100000000
       this.usdcFee = Math.round(usdcObj.lastFundingRate * 10000000000) / 100000000
       this.fundArr = res.data.map(a =>{
@@ -444,7 +457,7 @@ export default {
     },
     fetchStride() {
       this.axios
-        .get('https://stride-api.polkachu.com/Stride-Labs/stride/stakeibc/host_zone')
+        .get(CORS_URL + 'https://stride-api.polkachu.com/Stride-Labs/stride/stakeibc/host_zone')
         .then(this.resStride)
         .catch(this.errRes)
     },
@@ -464,22 +477,31 @@ export default {
     resAave(res) {
       let obj = res.data.reserves.find(
         a => "137-0x2791bca1f2de4661ed88a30c99a7a9449aa84174-0xa97684ead0e402dc232d5a977953df7ecbab3cdb" == a.id)
-      this.aaveRate.pUsdc = Math.round(obj.liquidityRate * 10000) / 100
+      this.aaveRate.pUsdc = Math.round(obj.variableBorrowRate * 10000) / 100
       obj = res.data.reserves.find(
         a => "137-0xc2132d05d31c914a87c6611c10748aeb04b58e8f-0xa97684ead0e402dc232d5a977953df7ecbab3cdb" == a.id)
-      this.aaveRate.pUsdt = Math.round(obj.liquidityRate * 10000) / 100
+      this.aaveRate.pUsdt = Math.round(obj.variableBorrowRate * 10000) / 100
       obj = res.data.reserves.find(
         a => "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8" == a.underlyingAsset)
-      this.aaveRate.arUsdc = Math.round(obj.liquidityRate * 10000) / 100
+      this.aaveRate.arUsdc = Math.round(obj.variableBorrowRate * 10000) / 100
       obj = res.data.reserves.find(
         a => "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9" == a.underlyingAsset)
-      this.aaveRate.arUsdt = Math.round(obj.liquidityRate * 10000) / 100
+      this.aaveRate.arUsdt = Math.round(obj.variableBorrowRate * 10000) / 100
       obj = res.data.reserves.find(
         a => "0x7f5c764cbc14f9669b88837ca1490cca17c31607" == a.underlyingAsset)
-      this.aaveRate.opUsdc = Math.round(obj.liquidityRate * 10000) / 100
+      this.aaveRate.opUsdc = Math.round(obj.variableBorrowRate * 10000) / 100
       obj = res.data.reserves.find(
         a => "0x94b008aa00579c1307b0ef2c499ad98a8ce58e58" == a.underlyingAsset)
-      this.aaveRate.opUsdt = Math.round(obj.liquidityRate * 10000) / 100
+      this.aaveRate.opUsdt = Math.round(obj.variableBorrowRate * 10000) / 100      
+      obj = res.data.reserves.find(
+        a => "0x7ceb23fd6bc0add59e62ac25578270cff1b9f6190xd05e3e715d945b59290df0ae8ef85c1bdb684744" == a.id)
+      this.aaveRate.p2Eth = Math.round(obj.variableBorrowRate * 10000) / 100
+      obj = res.data.reserves.find(
+        a => "137-0x7ceb23fd6bc0add59e62ac25578270cff1b9f619-0xa97684ead0e402dc232d5a977953df7ecbab3cdb" == a.id)
+      this.aaveRate.pEth = Math.round(obj.variableBorrowRate * 10000) / 100
+      obj = res.data.reserves.find(
+        a => "0x82af49447d8a07e3bd95bd0d56f35241523fbab1" == a.underlyingAsset)
+      this.aaveRate.arEth = Math.round(obj.variableBorrowRate * 10000) / 100
     },
     fetchMax() {
       this.axios
@@ -518,7 +540,10 @@ export default {
     fetchOsmoAll() {      
       this.fetchPool(1, this.res1)
       this.fetchPool(584, this.res584)
+      this.fetchPool(681, this.res681)
       this.fetchPool(704, this.res704)
+      this.fetchPool(725, this.res725)
+      this.fetchPool(730, this.res730)
       this.fetchPool(712, this.res712)
       this.fetchPool(789, this.res789)
       this.fetchPool(803, this.res803)
@@ -552,15 +577,30 @@ export default {
       
       this.fetchOsmoAll()
     },
+    res681(res) {
+      let a = res.data.pool.pool_assets[0].token.amount
+      let b = res.data.pool.pool_assets[1].token.amount
+      this.price.fet.osm = Math.round(b / a * this.fixed_osmo * 10000000000000000) / 10000
+    },
     res704(res) {
       let a = res.data.pool.pool_assets[0].token.amount
       let b = res.data.pool.pool_assets[1].token.amount
       this.price.weth.osm = Math.round(b / a * this.fixed_osmo * 10000000000000) / 10
     },
+    res725(res) {
+      let a = res.data.pool.pool_assets[0].token.amount
+      let b = res.data.pool.pool_assets[1].token.amount
+      this.price.inj.osm = Math.round(b / a * this.fixed_osmo * 1000000000000000) / 1000
+    },
+    res730(res) {
+      let a = res.data.pool.pool_assets[0].token.amount
+      let b = res.data.pool.pool_assets[1].token.amount
+      this.price.kava.osm = Math.round(b / a * this.fixed_osmo * 10000)
+    },
     res789(res) {
       let a = res.data.pool.pool_assets[0].token.amount
       let b = res.data.pool.pool_assets[1].token.amount
-      this.price.wmatic.osm = Math.round(b / a * this.fixed_osmo * 10000000000000000) / 10000
+      this.price.matic.osm = Math.round(b / a * this.fixed_osmo * 10000000000000000) / 10000
     },
     res712(res) {
       let a = res.data.pool.pool_assets[0].token.amount
@@ -585,7 +625,7 @@ export default {
     res840(res) {
       let a = res.data.pool.pool_assets[0].token.amount
       let b = res.data.pool.pool_assets[1].token.amount
-      this.price.wbnb.osm = Math.round(b / a * this.fixed_osmo * 100000000000000) / 100
+      this.price.bnb.osm = Math.round(b / a * this.fixed_osmo * 100000000000000) / 100
     },
     res886(res) {
       let factor = res.data.pool.scaling_factors
@@ -628,7 +668,8 @@ export default {
     },
     resBusdAvailable(res) {
       if(res.status != 200) {
-        alert("Busd checking failed.")
+//        alert("Busd checking failed.")
+        this.busdAvailable = 'check failed.'
         return
       }
       this.busdAvailable = Math.round(res.data.balances[1].free * 10) / 10

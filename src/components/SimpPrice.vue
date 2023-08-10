@@ -16,19 +16,21 @@ export default {
   data () {
     return {
       symbolName: {
-        atom: 'Atom', osmo: 'Osmo', juno: 'Juno', scrt: 'Scrt',
-        wbtc: 'Btc', weth: 'Eth', wbnb: 'Bnb', wmatic: 'Mtc', kava: 'Kava'
+        atom: 'Atom', osmo: 'Osmo', juno: 'Juno', scrt: 'Scrt', inj: 'Inj', fet: 'Fet',
+        wbtc: 'Btc', weth: 'Eth', bnb: 'Bnb', matic: 'Mtc', kava: 'Kava'
       },
       feeData: {
-        atom: {osm: 0.002, ju: 0.0112, kv: 0.011, cr: 0.01, cex: 0.001},
+        atom: {osm: 0.002, ju: 0.0112, kv: 0.011, cr: 0.0052, cex: 0.001},
         osmo: {osm: 0.002, ju: 0.012, kv: 0.0145, cex: 0.001},
         juno: {osm: 0.003, ju: 0.0065, cex: 0.002},
         wbtc: {osm: 0.002, kv: 0.0095, pan: 0.003, cex: 0.001},
         weth: {osm: 0.002, cex: 0.001},
-        wbnb: {osm: 0.0052, cex: 0.001},
-        wmatic: {osm: 0.0048, cex: 0.001},
-        kava: {kv: 0.0068, cex: 0.001},
-        scrt: {osm: 0.002, cex: 0.001},
+        bnb: {osm: 0.0052, cex: 0.001},
+        matic: {osm: 0.0048, cex: 0.001},
+        kava: {osm: 0.002, kv: 0.0068, cex: 0.001},
+        scrt: {osm: 0.0038, cex: 0.001},
+        inj: {osm: 0.0039, cex: 0.001},
+        fet: {osm: 0.006, cex: 0.001},
       },
       commentData: {
         atom: {osm: '', ju: '(k)', kv: '(500)', cr: '(500)', cex: ''},
@@ -36,10 +38,12 @@ export default {
         juno: {osm: '', ju: '(k)', cex: ''},
         wbtc: {osm: '', kv: '(500)', pan: '', cex: ''},
         weth: {osm: '', cex: ''},
-        wbnb: {osm: '(k)', cex: ''},
-        wmatic: {osm: '(k)', cex: ''},
-        kava: {kv: '(500)', cex: ''},
-        scrt: {osm: '(500)', cex: ''},
+        bnb: {osm: '(k)', cex: ''},
+        matic: {osm: '(k)', cex: ''},
+        kava: {osm: '', kv: '(500)', cex: ''},
+        scrt: {osm: '(k)', cex: ''},
+        inj: {osm: '(k)', cex: ''},
+        fet: {osm: '(500)', cex: ''},
       },
     }
   },
