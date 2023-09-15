@@ -12,7 +12,6 @@
       == Cex-Usdc ======== <br>
       Bn: {{usdc_bn}}/{{busd_bn}}&nbsp;&nbsp; 
 <!--      Max: {{dcdt_mx}}&nbsp;&nbsp;<br>-->
-      Ku: {{usdc_ku}}/{{busd_ku}}&nbsp;&nbsp;
       <br>
       [TWD]&nbsp; {{usdt_mx}}&nbsp;&nbsp;<input v-model=usdc_mx style="width:80px">&nbsp;&nbsp;dc: {{usdc_mx_div}}
       <br><br>
@@ -64,7 +63,6 @@
       <SimpPrice ref="wbtc" symbol="WBTC" :priceData="price" :base="'cex'" :compare="'osm'"></SimpPrice>
       <SimpPrice ref="eth" symbol="ETH" :priceData="price" :base="'cex'" :compare="'osm'"></SimpPrice><br>
       <SimpPrice ref="atom" symbol="ATOM" :priceData="price" :base="'cex'" :compare="'osm'"></SimpPrice>
-      <SimpPrice ref="atom" symbol="ATOM" :priceData="price" :base="'osm'" :compare="'cr'"></SimpPrice><br>
       <SimpPrice ref="osmo" symbol="OSMO" :priceData="price" :base="'cex'" :compare="'osm'"></SimpPrice><br>
 <!--
       <SimpPrice ref="bnb" symbol="BNB" :priceData="price" :base="'cex'" :compare="'osm'"></SimpPrice>
@@ -80,10 +78,6 @@
       [stOs] {{osmo_redeem}} ~ osm {{st_osmo}}&nbsp;&nbsp;<a :href="genLink(833)" target="_blank" class="div_ju">{{st_osmo_div}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;0.3
       <br>
       [stAt] {{atom_redeem}} ~ osm {{st_atom}}&nbsp;&nbsp;<a :href="genLink(803)" target="_blank" class="div_ju">{{st_atom_div}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;0.3
-      <br>
-      [stAt] {{atom_redeem}} ~ cr {{st_atom_cr}}&nbsp;&nbsp;<a :href="genLink(803)" target="_blank" class="div_cr">{{st_atom_cr_div}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;0.17
-      <br>
-      [st-x] {{st_atom}} ~ cr {{st_atom_cr}}&nbsp;&nbsp;<a :href="genLink(803)" target="_blank" class="s_red">{{st_dex_div}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;0.47
       <br><br>
       <input type="checkbox" v-model=bNoticeLevana> Levana Atom pool: ${{levanaAtom}}<br>
       rev: <input v-model=levana_rev style="width:80px"> / {{levana_period}}天 = {{levana_annual}}%<br>
@@ -119,7 +113,7 @@ export default {
       bNoticeLevana: false,
       
       price: {
-        atom: {osm: 1, ju: 1, kv: 1, cex: 1, cr: 1},
+        atom: {osm: 1, ju: 1, kv: 1, cex: 1},
         osmo: {osm: 1, ju: 1, cex: 1},
         juno: {osm: 1, ju: 1},
         wbtc: {osm: 1, cex: 1},
@@ -152,9 +146,6 @@ export default {
       bchFee: 1,
       dogeFee: 1,
       
-      usdc_ku: 1,
-      busd_ku: 1,
-      
       usdc_mx: 1,
       usdt_mx: 1,
       dcdt_mx: 1,
@@ -179,10 +170,6 @@ export default {
       
       st_atom: 1,  // 803
       st_osmo: 1,  // 833
-      
-      st_atom_cr: 1,
-      st_atom_cr_ist: 1,
-      st_cost: 0,
       
       atom_redeem: 1,
       osmo_redeem: 1,
@@ -330,18 +317,6 @@ export default {
       })
       this.fundArr = this.fundArr.filter(a => a.rate > 0.01)
     },
-    fetchKucoin() { 
-      this.axios
-        .get(CORS_URL + 'https://api.kucoin.com/api/v1/market/allTickers')
-        .then(this.resKucoin)
-        .catch(this.errRes)
-    },
-    resKucoin(res) {
-      let usdcObj = res.data.data.ticker.find(a => 'USDC-USDT' == a.symbol)
-      let busdcObj = res.data.data.ticker.find(a => 'BUSD-USDT' == a.symbol)
-      this.usdc_ku = Math.round(usdcObj.last * 10000) / 1
-      this.busd_ku = Math.round(busdcObj.last * 10000) / 1
-    },
     fetchOsmoInfo() {
       this.axios
         .get('https://api-osmosis.imperator.co/tokens/v2/all')
@@ -357,22 +332,6 @@ export default {
         Math.round(res.data.find(a=> a.symbol == 'MARS').price * 10000) / 10000
       this.strd_info =
         Math.round(res.data.find(a=> a.symbol == 'STRD').price * 1000) / 1000
-    },
-    fetchCrescent() {
-      this.axios
-//        .get('https://apigw-v2.crescent.network/pair/info')
-        .get('https://apigw-v3.crescent.network/pool/live')
-        .then(this.resCrescent)
-        .catch(this.errRes)
-    },
-    resCrescent(res) {
-      let stObj = res.data.data.find(a => 76 == a.poolId)
-      let atomObj = res.data.data.find(a => 19 == a.poolId)
-      
-      if(atomObj) {
-        this.price.atom.cr = Math.round(atomObj.poolPrice * 100) / 100
-        this.st_atom_cr = Math.round(stObj.poolPrice * 10000) / 10000
-      }
     },
     fetchStride() {
       this.axios
@@ -403,9 +362,7 @@ export default {
     fetchStart() {
       this.fetchPrior()
       
-      this.fetchCrescent()
       this.fetchOsmoInfo()
-      this.fetchKucoin()
       this.fetchMax()
       
       this.checkCorsAlive()
@@ -551,16 +508,9 @@ export default {
       // wbtc提現費0.00017, 跨鏈0.00003+gas, 總成本0.0002+5u(gas)
       return Math.round((0.0002 / this.wbtc_qt + (5 / this.wbtc_bn / this.wbtc_qt) + 0.001) * 100000) / 1000
     },
-    st_dex_div() {
-      return this.calDiv(this.st_atom_cr, this.st_atom, 0.0047)
-    },
     st_atom_div() {
       let fee = (this.bShowStBuy) ? 0.003 : -0.003
       return this.calDiv(this.st_atom, this.atom_redeem, fee)
-    },
-    st_atom_cr_div() {
-      let fee = (this.bShowStBuy) ? 0.0017 : -0.0017
-      return this.calDiv(this.st_atom_cr, this.atom_redeem, fee)
     },
     st_osmo_div() {
       let fee = (this.bShowStBuy) ? 0.003 : -0.003
