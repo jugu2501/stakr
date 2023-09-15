@@ -17,14 +17,14 @@ export default {
     return {
       symbolName: {
         atom: 'Atom', osmo: 'Osmo', juno: 'Juno', scrt: 'Scrt', inj: 'Inj', fet: 'Fet',
-        wbtc: 'Btc', weth: 'Eth', bnb: 'Bnb', matic: 'Mtc', kava: 'Kava'
+        wbtc: 'Btc', eth: 'Eth', bnb: 'Bnb', matic: 'Mtc', kava: 'Kava'
       },
       feeData: {
         atom: {osm: 0.002, ju: 0.0112, kv: 0.011, cr: 0.0052, cex: 0.001},
         osmo: {osm: 0.002, ju: 0.012, kv: 0.0145, cex: 0.001},
         juno: {osm: 0.003, ju: 0.0065, cex: 0.002},
         wbtc: {osm: 0.002, kv: 0.0095, pan: 0.003, cex: 0.001},
-        weth: {osm: 0.002, cex: 0.001},
+        eth: {osm: 0.002, cex: 0.001},
         bnb: {osm: 0.0052, cex: 0.001},
         matic: {osm: 0.0048, cex: 0.001},
         kava: {osm: 0.002, kv: 0.0068, cex: 0.001},
@@ -37,7 +37,7 @@ export default {
         osmo: {osm: '', ju: '(500)', kv: '(300)', cex: ''},
         juno: {osm: '', ju: '(k)', cex: ''},
         wbtc: {osm: '', kv: '(500)', pan: '', cex: ''},
-        weth: {osm: '', cex: ''},
+        eth: {osm: '', cex: ''},
         bnb: {osm: '(k)', cex: ''},
         matic: {osm: '(k)', cex: ''},
         kava: {osm: '', kv: '(500)', cex: ''},
@@ -55,7 +55,7 @@ export default {
   },
   methods: {
     buyWithUsdc() {
-      return "https://frontier.osmosis.zone/?from=USDC&to=" + this.symbol
+      return "https://app.osmosis.zone/?from=USDC&to=" + this.symbol
     },
     calDiv(a, b, fee, isJunoswap) {
       let result = a / b - 1

@@ -7,6 +7,7 @@
   [Opti]&nbsp;&nbsp;<a class="div_ju">{{rate(usdc.op)}}%</a>&nbsp;&nbsp;<a class="div_cr">{{rate(usdt.op)}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;eth-<a class="s_red">{{rate(eth.op)}}%</a><br>
   [Eth]&nbsp;&nbsp;<a class="div_ju">{{rate(usdc.e)}}%</a>&nbsp;&nbsp;<a class="div_cr">{{rate(usdt.e)}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;eth-<a class="s_red">{{rate(eth.e)}}%</a><br>
   [E-v2]&nbsp;&nbsp;<a class="div_ju">{{rate(usdc.e2)}}%</a>&nbsp;&nbsp;<a class="div_cr">{{rate(usdt.e2)}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;eth-<a class="s_red">{{rate(eth.e2)}}%</a><br>
+  [Comp]&nbsp;&nbsp;p-<a class="div_ju">{{compRate.p}}%</a>&nbsp;&nbsp;ar-<a class="div_ju">{{compRate.ar}}%</a>&nbsp;&nbsp;ba-<a class="div_ju">{{compRate.ba}}%</a>
 </div>
 </template>
 
@@ -15,9 +16,10 @@
 export default {
   data () {
     return {
+      msg: '',
       bShowMore: false,
-      aaveRate: {},
-      lastData: {}
+      aaveData: {},
+      compRate: {},
     }
   },
 //  props: ['symbol', 'priceData', 'compareDex'],
@@ -32,10 +34,11 @@ export default {
     },
     fetch() {
       this.fetchAave()
+      this.fetchComp()
     },
     rate(id) {
-      if(this.lastData) {
-        let obj = this.lastData.reserves.find(a => id == a.id)
+      if(this.aaveData && this.aaveData.reserves) {
+        let obj = this.aaveData.reserves.find(a => id == a.id)
         return Math.round(obj.variableBorrowRate * 10000) / 100        
       }
       return -1
@@ -47,48 +50,33 @@ export default {
         .catch(this.errRes)
     },
     resAave(res) {
-      this.lastData = res.data
-      return
-      let obj = res.data.reserves.find(
-        a => "137-0x2791bca1f2de4661ed88a30c99a7a9449aa84174-0xa97684ead0e402dc232d5a977953df7ecbab3cdb" == a.id)
-      this.aaveRate.pUsdc = Math.round(obj.variableBorrowRate * 10000) / 100
-      obj = res.data.reserves.find(
-        a => "137-0xc2132d05d31c914a87c6611c10748aeb04b58e8f-0xa97684ead0e402dc232d5a977953df7ecbab3cdb" == a.id)
-//      this.aaveRate.pUsdt = Math.round(obj.variableBorrowRate * 10000) / 100
-      this.aaveRate.pUsdt = this.findData(res, "137-0xc2132d05d31c914a87c6611c10748aeb04b58e8f-0xa97684ead0e402dc232d5a977953df7ecbab3cdb")
-      obj = res.data.reserves.find(
-        a => "0x2791bca1f2de4661ed88a30c99a7a9449aa841740xd05e3e715d945b59290df0ae8ef85c1bdb684744" == a.id)
-      this.aaveRate.p2Usdc = Math.round(obj.variableBorrowRate * 10000) / 100
-      obj = res.data.reserves.find(
-        a => "0xc2132d05d31c914a87c6611c10748aeb04b58e8f0xd05e3e715d945b59290df0ae8ef85c1bdb684744" == a.id)
-      this.aaveRate.p2Usdt = Math.round(obj.variableBorrowRate * 10000) / 100
-      
-      obj = res.data.reserves.find(
-        a => "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8" == a.underlyingAsset)
-      this.aaveRate.arUsdc = Math.round(obj.variableBorrowRate * 10000) / 100
-      obj = res.data.reserves.find(
-        a => "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9" == a.underlyingAsset)
-      this.aaveRate.arUsdt = Math.round(obj.variableBorrowRate * 10000) / 100
-      obj = res.data.reserves.find(
-        a => "0x7f5c764cbc14f9669b88837ca1490cca17c31607" == a.underlyingAsset)
-      this.aaveRate.opUsdc = Math.round(obj.variableBorrowRate * 10000) / 100
-      obj = res.data.reserves.find(
-        a => "0x94b008aa00579c1307b0ef2c499ad98a8ce58e58" == a.underlyingAsset)
-      this.aaveRate.opUsdt = Math.round(obj.variableBorrowRate * 10000) / 100      
-      obj = res.data.reserves.find(
-        a => "0x7ceb23fd6bc0add59e62ac25578270cff1b9f6190xd05e3e715d945b59290df0ae8ef85c1bdb684744" == a.id)
-      this.aaveRate.p2Eth = Math.round(obj.variableBorrowRate * 10000) / 100
-      obj = res.data.reserves.find(
-        a => "137-0x7ceb23fd6bc0add59e62ac25578270cff1b9f619-0xa97684ead0e402dc232d5a977953df7ecbab3cdb" == a.id)
-      this.aaveRate.pEth = Math.round(obj.variableBorrowRate * 10000) / 100
-      obj = res.data.reserves.find(
-        a => "0x82af49447d8a07e3bd95bd0d56f35241523fbab1" == a.underlyingAsset)
-      this.aaveRate.arEth = Math.round(obj.variableBorrowRate * 10000) / 100
-      
-//      this.axios
-//        .get('https://api.curve.fi/api/getPools/polygon/factory')
-//        .then(this.resCurve)
-//        .catch(this.errRes)
+      this.aaveData = res.data
+    },
+    fetchComp() {
+      this.axios
+        .get('https://v3-api.compound.finance/market/polygon-mainnet/0xF25212E676D1F7F89Cd72fFEe66158f541246445/historical/summary')
+        .then(this.resCompPoly)
+        .catch(this.errRes)
+      this.axios
+        .get('https://v3-api.compound.finance/market/arbitrum-mainnet/0xA5EDBDD9646f8dFF606d7448e414884C7d905dCA/historical/summary')
+        .then(this.resCompAr)
+        .catch(this.errRes)
+      this.axios
+        .get('https://v3-api.compound.finance/market/base-mainnet/0x9c4ec768c28520B50860ea7a15bd7213a9fF58bf/historical/summary')
+        .then(this.resCompBa)
+        .catch(this.errRes)
+    },
+    resCompPoly(res) {
+      let idx = res.data.length - 1
+      this.compRate.p = Math.round(res.data[idx].borrow_apr * 10000) / 100
+    },
+    resCompAr(res) {
+      let idx = res.data.length - 1
+      this.compRate.ar = Math.round(res.data[idx].borrow_apr * 10000) / 100
+    },
+    resCompBa(res) {
+      let idx = res.data.length - 1
+      this.compRate.ba = Math.round(res.data[idx].borrow_apr * 10000) / 100
     },
     checkCondition(noticeFunc) {
     },
