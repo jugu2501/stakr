@@ -218,7 +218,7 @@ export default {
       if(Math.abs(this.$refs.osmo.getDiv('osm', 'cex')) > 2) {
         this.notice('OSMO go!!', 567)
       } 
-      if(this.price.osmo.osm > 0.335 || this.price.osmo.osm < 0.3067) {
+      if(this.price.osmo.osm > 0.36 || this.price.osmo.osm < 0.321) {
         this.notice('Watch OSMO LP!!', 567)
       } 
 //      if(Math.abs(this.$refs.bnb.getDiv('osm', 'cex')) > 2) {
@@ -375,20 +375,20 @@ export default {
     },
     fetchPrior() {
       this.fetchBinance()
-      this.fetchPool(678, this.res678)
+      this.fetchPool(1133, this.res1133)
     },
-    fetchOsmoAll() {      
-      this.fetchPool(1, this.res1)
+    fetchOsmoAll() {    
       this.fetchPool(584, this.res584)
       this.fetchPool(681, this.res681)
-      this.fetchPool(704, this.res704)
       this.fetchPool(725, this.res725)
       this.fetchPool(730, this.res730)
-      this.fetchPool(712, this.res712)
       this.fetchPool(789, this.res789)
-      this.fetchPool(803, this.res803)
       this.fetchPool(833, this.res833)
-      this.fetchPool(840, this.res840)
+      this.fetchPool(840, this.res840)  
+      this.fetchPool(1090, this.res1090)
+      this.fetchPool(1134, this.res1134)
+      this.fetchPool(1135, this.res1135)
+      this.fetchPool(1136, this.res1136)
     },
     fetchPool(poolID, funcRes) {
       this.axios 
@@ -399,32 +399,15 @@ export default {
         .then(funcRes)
         .catch(this.errRes)
     },
-    res1(res) {
-      let a = res.data.pool.pool_assets[0].token.amount
-      let b = res.data.pool.pool_assets[1].token.amount
-      this.price.atom.osm = Math.round(b / a * this.fixed_osmo * 1000) / 1000
-    },
     res584(res) {
       let a = res.data.pool.pool_assets[0].token.amount
       let b = res.data.pool.pool_assets[1].token.amount
       this.price.scrt.osm = Math.round(b / a * this.fixed_osmo * 10000)
     },
-    res678(res) {
-      let a = res.data.pool.pool_assets[0].token.amount
-      let b = res.data.pool.pool_assets[1].token.amount
-      this.price.osmo.osm = Math.round((a / b) * 10000) / 10000
-      
-      this.fetchOsmoAll()
-    },
     res681(res) {
       let a = res.data.pool.pool_assets[0].token.amount
       let b = res.data.pool.pool_assets[1].token.amount
       this.price.fet.osm = Math.round(b / a * this.fixed_osmo * 10000000000000000) / 10000
-    },
-    res704(res) {
-      let a = res.data.pool.pool_assets[0].token.amount
-      let b = res.data.pool.pool_assets[1].token.amount
-      this.price.eth.osm = Math.round(b / a * this.fixed_osmo * 10000000000000) / 10
     },
     res725(res) {
       let a = res.data.pool.pool_assets[0].token.amount
@@ -441,16 +424,6 @@ export default {
       let b = res.data.pool.pool_assets[1].token.amount
       this.price.matic.osm = Math.round(b / a * this.fixed_osmo * 10000000000000000) / 10000
     },
-    res712(res) {
-      let a = res.data.pool.pool_assets[0].token.amount
-      let b = res.data.pool.pool_assets[1].token.amount
-      this.price.wbtc.osm = Math.round(b / a * this.fixed_osmo * 100)
-    },
-    res803(res) {
-      let a = res.data.pool.pool_assets[0].token.amount
-      let b = res.data.pool.pool_assets[1].token.amount
-      this.st_atom = Math.round(a / b * 10000) / 10000
-    },
     res833(res) {
       let factor = res.data.pool.scaling_factors
       let std_ratio = factor[1] / factor[0]
@@ -465,6 +438,34 @@ export default {
       let a = res.data.pool.pool_assets[0].token.amount
       let b = res.data.pool.pool_assets[1].token.amount
       this.price.bnb.osm = Math.round(b / a * this.fixed_osmo * 100000000000000) / 100
+    },
+    res1090(res) {
+      let sqrt = res.data.pool.current_sqrt_price * 0.1
+      this.price.wbtc.osm = Math.round(this.fixed_osmo / sqrt / sqrt * 10) / 10
+    },
+    res1133(res) {
+      let sqrt = res.data.pool.current_sqrt_price
+      this.price.osmo.osm = Math.round(sqrt * sqrt * 10000) / 10000
+      
+      this.fetchOsmoAll()
+    },
+    res1134(res) {
+      let sqrt = res.data.pool.current_sqrt_price * 0.000001
+      this.price.eth.osm = Math.round(this.fixed_osmo / sqrt / sqrt * 10) / 10
+//      let a = res.data.pool.pool_assets[0].token.amount
+//      let b = res.data.pool.pool_assets[1].token.amount
+//      this.price.eth.osm = Math.round(b / a * this.fixed_osmo * 10000000000000) / 10
+    },
+    res1135(res) {
+      let sqrt = res.data.pool.current_sqrt_price
+      this.price.atom.osm = Math.round(this.fixed_osmo / sqrt / sqrt * 1000) / 1000
+    },
+    res1136(res) {
+      let sqrt = res.data.pool.current_sqrt_price
+      this.st_atom = Math.round(sqrt * sqrt * 10000) / 10000
+//      let a = res.data.pool.pool_assets[0].token.amount
+//      let b = res.data.pool.pool_assets[1].token.amount
+//      this.st_atom = Math.round(a / b * 10000) / 10000
     },
     errRes(res) {
       console.log('error')
