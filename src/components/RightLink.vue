@@ -21,7 +21,7 @@
     <a href="https://app.venus.io/" target="_blank">Venus</a><br>
     <a href="https://app.compound.finance/markets?market=usdbc-basemainnet" target="_blank">Compound</a><br>
     <a href="https://app.gmx.io/#/v2" target="_blank">GMX perp</a><br>
-    <a href="https://trade.levana.finance/osmosis/earn" target="_blank">Levana</a><br>
+    <a href="https://trade.levana.finance/stats?market=atom_usd" target="_blank">Levana</a><br>
     <hr>
 <!--
     <a href="https://ycharts.com/indicators/3_month_t_bill" target="_blank">T-bill chart</a><br>

@@ -77,12 +77,23 @@
       <br>
       [stOs] {{osmo_redeem}} ~ osm {{st_osmo}}&nbsp;&nbsp;<a :href="genLink(833)" target="_blank" class="div_ju">{{st_osmo_div}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;0.3
       <br>
-      [stAt] {{atom_redeem}} ~ osm {{st_atom}}&nbsp;&nbsp;<a :href="genLink(803)" target="_blank" class="div_ju">{{st_atom_div}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;0.3
+      [stAt] {{atom_redeem}} ~ osm {{st_atom}}&nbsp;&nbsp;<a :href="genLink(1136)" target="_blank" class="div_ju">{{st_atom_div}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;0.3
       <br><br>
       <input type="checkbox" v-model=bNoticeLevana> Levana Atom pool: ${{levanaAtom}}<br>
       rev: <input v-model=levana_rev style="width:80px"> / {{levana_period}}天 = {{levana_annual}}%<br>
       bt_rev: <input v-model=levana_rev2 style="width:80px"> / {{levana_period2}}天 = {{levana_annual2}}%<br>
       o_rev: <input v-model=levana_rev3 style="width:80px"> / {{levana_period3}}天 = {{levana_annual3}}%<br>
+      <br><br>
+      cake calc: <a class="s_red"> {{calcRes}}%</a><br>
+      <input type="radio" id="a" v-model=calc_fee value="0.01"/>
+      <label for="a">0.01%</label>&nbsp;
+      <input type="radio" id="b" v-model=calc_fee value="0.05"/>
+      <label for="b">0.05%</label>&nbsp;
+      <input type="radio" id="c" v-model=calc_fee value="0.2"/>
+      <label for="c">0.2%</label><br>
+      liq: <input v-model=calc_liq style="width:40px"> M&nbsp;&nbsp;
+      7vol: <input v-model=calc_vol style="width:40px"> M&nbsp;&nbsp;
+      7fee: <input v-model=calc_7d_fee style="width:40px">
       <br><br><br>
     </div>
   </div> 
@@ -168,6 +179,11 @@ export default {
       levana_period2: 1,
       levana_period3: 1,
       
+      calc_fee: 0.01,
+      calc_liq: 1,
+      calc_vol: 1,
+      calc_7d_fee: 1,
+      
       st_atom: 1,  // 803
       st_osmo: 1,  // 833
       
@@ -218,7 +234,7 @@ export default {
       if(Math.abs(this.$refs.osmo.getDiv('osm', 'cex')) > 2) {
         this.notice('OSMO go!!', 567)
       } 
-      if(this.price.osmo.osm > 0.36 || this.price.osmo.osm < 0.321) {
+      if(this.price.osmo.osm > 0.26 || this.price.osmo.osm < 0.23) {
         this.notice('Watch OSMO LP!!', 567)
       } 
 //      if(Math.abs(this.$refs.bnb.getDiv('osm', 'cex')) > 2) {
@@ -564,6 +580,14 @@ export default {
     },
     levana_annual3() {
       return Math.round(this.levana_rev3 / this.levana_period3 * 365 / 100 * 10000) / 100
+    },
+    calcRes() {
+      let liq = this.calc_liq * 1000000
+      if(this.calc_7d_fee > 1) {
+        return Math.round(this.calc_7d_fee / liq / 7 * 365 * 10000) / 100
+      }
+      let rev = this.calc_vol * 1000000 * this.calc_fee / 100 / 7 * 365
+      return Math.round(rev / liq * 10000) / 100
     },
   },
 }
