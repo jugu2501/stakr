@@ -23,9 +23,6 @@
       [BNB Fee] <a class="s_red">{{bnbFee}}%</a><br>
       [DOGE Fee] <a class="s_red">{{dogeFee}}%</a><br>
       [BCH Fee] <a class="s_red">{{bchFee}}%</a><br>
-<!--
-      [WBTC]&nbsp; {{wbtc_bn}}&nbsp;&nbsp;<input v-model=wbtc_qt style="width:30px">&nbsp;&nbsp;{{wbtc_fee}}%
--->
       <br>
       <div v-for="fund in fundArr">
         {{fund.symbol}}: {{fund.rate}}%
@@ -64,26 +61,12 @@
       <SimpPrice ref="eth" symbol="ETH" :priceData="price" :base="'cex'" :compare="'osm'"></SimpPrice><br>
       <SimpPrice ref="atom" symbol="ATOM" :priceData="price" :base="'cex'" :compare="'osm'"></SimpPrice>
       <SimpPrice ref="osmo" symbol="OSMO" :priceData="price" :base="'cex'" :compare="'osm'"></SimpPrice><br>
-<!--
-      <SimpPrice ref="bnb" symbol="BNB" :priceData="price" :base="'cex'" :compare="'osm'"></SimpPrice>
-      <SimpPrice ref="matic" symbol="MATIC" :priceData="price" :base="'cex'" :compare="'osm'"></SimpPrice>
-      <SimpPrice ref="kava" symbol="KAVA" :priceData="price" :base="'cex'" :compare="'osm'"></SimpPrice>
-      <SimpPrice ref="scrt" symbol="SCRT" :priceData="price" :base="'cex'" :compare="'osm'"></SimpPrice>
-      <SimpPrice ref="inj" symbol="INJ" :priceData="price" :base="'cex'" :compare="'osm'"></SimpPrice>
-      <SimpPrice ref="fet" symbol="FET" :priceData="price" :base="'cex'" :compare="'osm'"></SimpPrice>
--->
-      <br>
       <input type="checkbox" v-model=bShowStBuy> Buying St&nbsp;&nbsp;
       <br>
       [stOs] {{osmo_redeem}} ~ osm {{st_osmo}}&nbsp;&nbsp;<a :href="genLink(833)" target="_blank" class="div_ju">{{st_osmo_div}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;0.3
       <br>
       [stAt] {{atom_redeem}} ~ osm {{st_atom}}&nbsp;&nbsp;<a :href="genLink(1136)" target="_blank" class="div_ju">{{st_atom_div}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;0.3
-      <br><br>
-      <input type="checkbox" v-model=bNoticeLevana> Levana Atom pool: ${{levanaAtom}}<br>
-      rev: <input v-model=levana_rev style="width:80px"> / {{levana_period}}天 = {{levana_annual}}%<br>
-      bt_rev: <input v-model=levana_rev2 style="width:80px"> / {{levana_period2}}天 = {{levana_annual2}}%<br>
-      o_rev: <input v-model=levana_rev3 style="width:80px"> / {{levana_period3}}天 = {{levana_annual3}}%<br>
-      <br><br>
+      <br><br><br>
       cake calc: <a class="s_red"> {{calcRes}}%</a><br>
       <input type="radio" id="a" v-model=calc_fee value="0.01"/>
       <label for="a">0.01%</label>&nbsp;
@@ -121,7 +104,6 @@ export default {
       bRateNotice: false,
       bUpdateMaxDc: true,
       bShowStBuy: true,
-      bNoticeLevana: false,
       
       price: {
         atom: {osm: 1, ju: 1, kv: 1, cex: 1},
@@ -171,13 +153,6 @@ export default {
       gmx_period: 1,
       eth_future_div: 0,
       btc_future_div: 0,
-      
-      levana_rev: 0,
-      levana_rev2: 0,
-      levana_rev3: 0,
-      levana_period: 1,
-      levana_period2: 1,
-      levana_period3: 1,
       
       calc_fee: 0.01,
       calc_liq: 1,
@@ -237,12 +212,6 @@ export default {
       if(this.price.osmo.osm > 0.26 || this.price.osmo.osm < 0.23) {
         this.notice('Watch OSMO LP!!', 567)
       } 
-//      if(Math.abs(this.$refs.bnb.getDiv('osm', 'cex')) > 2) {
-//        this.notice('BNB go!!', 567)
-//      }
-//      if(Math.abs(this.$refs.matic.getDiv('osm', 'cex')) > 2) {
-//        this.notice('MATIC go!!', 567)
-//      } 
       if(this.bRateNotice && (this.atomFee < 0 || this.usdcRate > 3)) {
         this.notice('Watch funding rate!!', 567)
       }
@@ -252,10 +221,6 @@ export default {
       
       if(this.bAxlNotice) {
         this.$refs.curve_pools.checkCondition(this.notice)
-      }
-      
-      if(this.bNoticeLevana && this.levanaAtom < 500000 && this.levanaAtom > 400000) {
-        this.notice('Levana Atom GO!!', 567)
       }
     },
     fetchBinance() { 
@@ -279,10 +244,6 @@ export default {
         Math.round(res.data.find(a=> a.symbol == 'ETHUSDT').price * 10) / 10
       this.price.bnb.cex =
         Math.round(res.data.find(a=> a.symbol == 'BNBUSDT').price * 100) / 100
-      this.price.matic.cex =
-        Math.round(res.data.find(a=> a.symbol == 'MATICUSDT').price * 10000) / 10000
-      this.price.kava.cex =
-        Math.round(res.data.find(a=> a.symbol == 'KAVAUSDT').price * 10000)
       this.doge_bn =
         Math.round(res.data.find(a=> a.symbol == 'DOGEUSDT').price * 1000000) / 1000000
       this.bch_bn =
@@ -303,10 +264,6 @@ export default {
         Math.round(res.data.find(a=> a.symbol == 'RDNTUSDT').price * 10000) / 10000
       this.cake_bn =
         Math.round(res.data.find(a=> a.symbol == 'CAKEUSDT').price * 1000) / 1000
-      this.price.inj.cex =
-        Math.round(res.data.find(a=> a.symbol == 'INJUSDT').price * 1000) / 1000
-      this.price.fet.cex =
-        Math.round(res.data.find(a=> a.symbol == 'FETUSDT').price * 10000) / 10000
       this.xvs_bn =
         Math.round(res.data.find(a=> a.symbol == 'XVSUSDT').price * 1000) / 1000
       this.comp_bn =
@@ -358,8 +315,8 @@ export default {
     resStride(res) {
       let resArr = res.data.host_zone
       let atomObj = resArr.find(a => a.chain_id == "cosmoshub-4")
-//      let osmoObj = resArr.find(a => a.chain_id == "osmosis-1")
       this.atom_redeem = Math.round(atomObj.redemption_rate * 10000) / 10000
+//      let osmoObj = resArr.find(a => a.chain_id == "osmosis-1")
 //      this.osmo_redeem = Math.round(osmoObj.redemption_rate * 10000) / 10000
     },
     fetchMax() {
@@ -394,11 +351,6 @@ export default {
       this.fetchPool(1133, this.res1133)
     },
     fetchOsmoAll() {    
-      this.fetchPool(584, this.res584)
-      this.fetchPool(681, this.res681)
-      this.fetchPool(725, this.res725)
-      this.fetchPool(730, this.res730)
-      this.fetchPool(789, this.res789)
       this.fetchPool(833, this.res833)
       this.fetchPool(840, this.res840)  
       this.fetchPool(1090, this.res1090)
@@ -415,31 +367,6 @@ export default {
         .then(funcRes)
         .catch(this.errRes)
     },
-    res584(res) {
-      let a = res.data.pool.pool_assets[0].token.amount
-      let b = res.data.pool.pool_assets[1].token.amount
-      this.price.scrt.osm = Math.round(b / a * this.fixed_osmo * 10000)
-    },
-    res681(res) {
-      let a = res.data.pool.pool_assets[0].token.amount
-      let b = res.data.pool.pool_assets[1].token.amount
-      this.price.fet.osm = Math.round(b / a * this.fixed_osmo * 10000000000000000) / 10000
-    },
-    res725(res) {
-      let a = res.data.pool.pool_assets[0].token.amount
-      let b = res.data.pool.pool_assets[1].token.amount
-      this.price.inj.osm = Math.round(b / a * this.fixed_osmo * 1000000000000000) / 1000
-    },
-    res730(res) {
-      let a = res.data.pool.pool_assets[0].token.amount
-      let b = res.data.pool.pool_assets[1].token.amount
-      this.price.kava.osm = Math.round(b / a * this.fixed_osmo * 10000)
-    },
-    res789(res) {
-      let a = res.data.pool.pool_assets[0].token.amount
-      let b = res.data.pool.pool_assets[1].token.amount
-      this.price.matic.osm = Math.round(b / a * this.fixed_osmo * 10000000000000000) / 10000
-    },
     res833(res) {
       let factor = res.data.pool.scaling_factors
       let std_ratio = factor[1] / factor[0]
@@ -449,11 +376,6 @@ export default {
       let div = ((liq[1].amount / liq[0].amount) - 1) / 25128
       let div2 = liq[1].amount / liq[0].amount
       this.st_osmo = Math.round((std_ratio + div) * 10000) / 10000
-    },
-    res840(res) {
-      let a = res.data.pool.pool_assets[0].token.amount
-      let b = res.data.pool.pool_assets[1].token.amount
-      this.price.bnb.osm = Math.round(b / a * this.fixed_osmo * 100000000000000) / 100
     },
     res1090(res) {
       let sqrt = res.data.pool.current_sqrt_price * 0.1
@@ -468,9 +390,6 @@ export default {
     res1134(res) {
       let sqrt = res.data.pool.current_sqrt_price * 0.000001
       this.price.eth.osm = Math.round(this.fixed_osmo / sqrt / sqrt * 10) / 10
-//      let a = res.data.pool.pool_assets[0].token.amount
-//      let b = res.data.pool.pool_assets[1].token.amount
-//      this.price.eth.osm = Math.round(b / a * this.fixed_osmo * 10000000000000) / 10
     },
     res1135(res) {
       let sqrt = res.data.pool.current_sqrt_price
@@ -479,9 +398,6 @@ export default {
     res1136(res) {
       let sqrt = res.data.pool.current_sqrt_price
       this.st_atom = Math.round(sqrt * sqrt * 10000) / 10000
-//      let a = res.data.pool.pool_assets[0].token.amount
-//      let b = res.data.pool.pool_assets[1].token.amount
-//      this.st_atom = Math.round(a / b * 10000) / 10000
     },
     errRes(res) {
       console.log('error')
@@ -512,19 +428,9 @@ export default {
       let now = new Date()
       let gmxStart = new Date('2023-08-13T01:15')
       this.gmx_period = Math.round((now - gmxStart) / 36000 / 24) / 100
-      let levanaStart = new Date('2023-08-28T16:00')
-      this.levana_period = Math.round((now - levanaStart) / 36000 / 24) / 100
-      levanaStart = new Date('2023-08-21T11:25')
-      this.levana_period2 = Math.round((now - levanaStart) / 36000 / 24) / 100
-      levanaStart = new Date('2023-08-17T12:30')
-      this.levana_period3 = Math.round((now - levanaStart) / 36000 / 24) / 100
     },
   },
   computed: {
-    wbtc_fee() {      
-      // wbtc提現費0.00017, 跨鏈0.00003+gas, 總成本0.0002+5u(gas)
-      return Math.round((0.0002 / this.wbtc_qt + (5 / this.wbtc_bn / this.wbtc_qt) + 0.001) * 100000) / 1000
-    },
     st_atom_div() {
       let fee = (this.bShowStBuy) ? 0.003 : -0.003
       return this.calDiv(this.st_atom, this.atom_redeem, fee)
@@ -563,31 +469,6 @@ export default {
       let end = new Date('2023-09-30T08:00')
       let period = (end - now) / 3600 / 24 / 1000
       return Math.round(this.btc_future_div / this.price.wbtc.cex / period * 365 * 10000) / 100
-    },
-    levanaAtom() {
-      return Math.round((44439.474  + 77014.93) * this.price.atom.osm)
-    },
-    levana_annual() {
-      let rev = this.levana_rev - 6.712  // avoid string
-      return Math.round(rev / this.levana_period * 365 / 506.712 * 10000) / 100
-    },
-    levana_annual2() {
-      // withdrawn = 0.043311, left = 175.7u
-      let leftRatio = 175.7 / (0.043311 * this.price.wbtc.cex + 175.7)
-      let cost = 0.05 * this.price.wbtc.cex * leftRatio
-      let rev = this.levana_rev2 - cost
-      return Math.round(rev / this.levana_period2 * 365 / cost * 10000) / 100
-    },
-    levana_annual3() {
-      return Math.round(this.levana_rev3 / this.levana_period3 * 365 / 100 * 10000) / 100
-    },
-    calcRes() {
-      let liq = this.calc_liq * 1000000
-      if(this.calc_7d_fee > 1) {
-        return Math.round(this.calc_7d_fee / liq / 7 * 365 * 10000) / 100
-      }
-      let rev = this.calc_vol * 1000000 * this.calc_fee / 100 / 7 * 365
-      return Math.round(rev / liq * 10000) / 100
     },
   },
 }
