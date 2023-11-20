@@ -61,12 +61,41 @@
       <SimpPrice ref="eth" symbol="ETH" :priceData="price" :base="'cex'" :compare="'osm'"></SimpPrice><br>
       <SimpPrice ref="atom" symbol="ATOM" :priceData="price" :base="'cex'" :compare="'osm'"></SimpPrice>
       <SimpPrice ref="osmo" symbol="OSMO" :priceData="price" :base="'cex'" :compare="'osm'"></SimpPrice><br>
+      == Position ========&nbsp;&nbsp;<input v-model=pos1221.reward style="width:60px"><br>
+      <input type="checkbox" v-model=bHavePos>&nbsp;&nbsp;<b>[1221]</b>&nbsp;&nbsp;估年收 {{annual_1221}}&nbsp;&nbsp;apr {{apr_1221}}%
+      &nbsp;&nbsp;<a @click="showPosDetail()">[+]</a><br>
+      <div v-show="bShowPosDetail" class="bg_grey">
+        &nbsp;&nbsp;&nbsp;&nbsp;{{pos1221.upper}}/{{pos1221.lower}}&nbsp;&nbsp;
+        {{pos1221.period}}h<br>
+        <b>[1136]</b> {{pos1136.upper}}/{{pos1136.lower}}&nbsp;&nbsp;
+        {{pos1136.period}}h&nbsp;&nbsp;&nbsp;${{pos1136.value}}<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;估年收 {{annual_1136}}&nbsp;&nbsp;
+        apr {{apr_1136}}% + st {{apr_1136_st}}%<br>
+        <b>[當期]</b> {{current_rev.period}}h<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;pos: {{current_rev.posOsmo}}o + {{current_rev.posUsd}}<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;現金: {{current_rev.nowOsmo}}o + {{current_rev.nowUsd}}<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;幣安: {{current_rev.bn_osmo}}o + {{current_rev.bn_usd}}
+        <br><br>
+      </div>
+      &nbsp;&nbsp;&nbsp;&nbsp;當期 {{current_1221}}&nbsp;&nbsp;&nbsp;估年收 {{current_annual}} &nbsp;&nbsp;&nbsp;apr {{apr_current}}%<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;NT<a class="div_ju">{{total_annual2}}萬</a>&nbsp;&nbsp;總年收 {{total_annual}} &nbsp;&nbsp;&nbsp;apr {{apr_total}}%
+      <br><br>      
+      == Levana ======== atom: {{total_atom}}<br>
+      [Atom Fee] apr <a class="s_red">{{atomFee_le}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;
+      [LP]&nbsp; {{atom_lp}}
+      <br>
+      [Osmo Fee] apr <a class="s_red">{{osmoFee}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;
+      [LP]&nbsp; {{osmo_lp}}
+      <br>
+      [st Fee] apr <a class="s_red">{{stFee}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;
+      [LP]&nbsp; {{st_lp}}
+      <br><br>
       <input type="checkbox" v-model=bShowStBuy> Buying St&nbsp;&nbsp;
       <br>
       [stOs] {{osmo_redeem}} ~ osm {{st_osmo}}&nbsp;&nbsp;<a :href="genLink(833)" target="_blank" class="div_ju">{{st_osmo_div}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;0.3
       <br>
       [stAt] {{atom_redeem}} ~ osm {{st_atom}}&nbsp;&nbsp;<a :href="genLink(1136)" target="_blank" class="div_ju">{{st_atom_div}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;0.3
-      <br><br><br>
+      <br><br>
       cake calc: <a class="s_red"> {{calcRes}}%</a><br>
       <input type="radio" id="a" v-model=calc_fee value="0.01"/>
       <label for="a">0.01%</label>&nbsp;
@@ -94,6 +123,7 @@ const CORS_URL = 'http://localhost:8088/'
 export default {
   data () {
     return {
+      now: '',
       msg: 0,
       interval: null,
       intervalCheck: null,       
@@ -104,26 +134,41 @@ export default {
       bRateNotice: false,
       bUpdateMaxDc: true,
       bShowStBuy: true,
+      bShowPosDetail: false,
+      bHavePos: false,
       
       price: {
         atom: {osm: 1, ju: 1, kv: 1, cex: 1},
         osmo: {osm: 1, ju: 1, cex: 1},
-        juno: {osm: 1, ju: 1},
         wbtc: {osm: 1, cex: 1},
         eth: {osm: 1, cex: 1},
         bnb: {osm: 1, cex: 1},
-        matic: {osm: 1, cex: 1},
-        kava: {osm: 1, cex: 1},
-        scrt: {osm: 1, cex: 1},
-        inj: {osm: 1, cex: 1},
-        fet: {osm: 1, cex: 1},
       },
+      
+      current_rev: {  // 本期收益計算
+        start: '2023-11-14T18:00', period: 1,
+        initOsmo: 6677.6, initUsd: 17485, deposit: -11440, // 還債2820@ar-aave, 買1428.7Doge, 進出買3639.2Doge, 買3552.1Btc
+        nowOsmo: 0, nowUsd: 0, posOsmo: 0, posUsd: 0,
+        bn_osmo: 3000, bn_usd: 2826.3, fi_osmo: 0, fi_usd: -2001,
+      },
+      pos1221: {
+        period: 1, value: 10000, reward: 0, lower: 1, upper: 1,
+      },
+      pos1136: {
+        end: '2023-11-10T19:30', period: 1, reward: 32.5,
+        value: 1, stValue: 1, atomAmt: 1, stAmt: 1, lower: 1, upper: 1,
+      },
+      contract_atom: -1000, // le: 0atm
+      collateral_le: 159.2, // st-atom
+      fee_le: 0, //usd 前期已支付=42
+      fund_le: 0, //usd 前期已有172.33
+      fee_osmo_le: -140, // 攤提一半
+      fund_osmo_le: 696, //usd 前期已有253.1
       
       doge_bn: 1,
       bch_bn: 1,
       wbtc_bn: 1,
       busd_bn: 1,
-      scrt_bn: 1,
       usdc_bn: 1,
       arb_bn: 1,
       dydx_bn: 1,
@@ -138,6 +183,13 @@ export default {
       bnbFee: 1,
       bchFee: 1,
       dogeFee: 1,
+      
+      atomFee_le: 1,
+      osmoFee: 1,
+      stFee: 1,
+      atom_lp: 1,
+      osmo_lp: 1,
+      st_lp: 1,
       
       usdc_mx: 1,
       usdt_mx: 1,
@@ -181,6 +233,30 @@ export default {
     this.fetchStart()
     this.fetchStride()
     this.interval = setInterval(this.fetchStart, 60000)
+    
+    // fetch pos 1136
+    this.axios
+      .get('https://api-osmosis-chain.imperator.co/cl/v1/position/create/osmo1m33zxjmdudyusrwx8yry5kkunhc780947g8akg')
+      .then(this.resPos2)
+      .catch(this.errRes)
+    // fetch levana lp
+    this.axios
+      .get(CORS_URL + 'https://indexer-mainnet.levana.finance/collateral-per-token2?market=osmo1hd7r733w49wrqnxx3daz4gy7kvdhgwsjwn28wj7msjfk4tde89aqjqhu8x')
+      .then(this.resLevana4)
+      .catch(this.errRes)
+    this.axios
+      .get(CORS_URL + 'https://indexer-mainnet.levana.finance/collateral-per-token2?market=osmo127aqy4697zqn27z0vqr3x2n8lraf27t7udvl6ef5hcwmwhjadegq9vytdj')
+      .then(this.resLevana5)
+      .catch(this.errRes)
+    this.axios
+      .get(CORS_URL + 'https://indexer-mainnet.levana.finance/collateral-per-token2?market=osmo1ufpu3nudumzh53sek246zrwvv2cc7leplaqruuggeny7wlcvfrzq4cqmwd')
+      .then(this.resLevana6)
+      .catch(this.errRes)
+  },
+  watch:{
+    bHavePos() {
+      this.fetchPos()      
+    },
   },
   methods: {
     genLink(poolID) {
@@ -188,6 +264,10 @@ export default {
     },
     notice(txt) {
       let notification = new Notification('chance!!', {body: txt})
+    },
+    updateCurrentRev() {      
+      let start = new Date(this.current_rev.start)
+      this.current_rev.period = Math.round((this.now - start) / 3600) / 1000
     },
     checkCondition() {
       if(!this.intervalCheck) {
@@ -209,7 +289,8 @@ export default {
       if(Math.abs(this.$refs.osmo.getDiv('osm', 'cex')) > 2) {
         this.notice('OSMO go!!', 567)
       } 
-      if(this.price.osmo.osm > 0.26 || this.price.osmo.osm < 0.23) {
+      if(this.bHavePos && (this.price.osmo.osm > this.pos1221.upper ||
+         this.price.osmo.osm < this.pos1221.lower)) {
         this.notice('Watch OSMO LP!!', 567)
       } 
       if(this.bRateNotice && (this.atomFee < 0 || this.usdcRate > 3)) {
@@ -252,8 +333,6 @@ export default {
         Math.round(res.data.find(a=> a.symbol == 'WBTCBTC').price * 10000)
       this.busd_bn =
         Math.round(res.data.find(a=> a.symbol == 'BUSDUSDT').price * 10000)
-      this.price.scrt.cex =
-        Math.round(res.data.find(a=> a.symbol == 'SCRTUSDT').price * 10000)
       this.usdc_bn = 
         Math.round(res.data.find(a=> a.symbol == 'USDCUSDT').price * 10000)
       this.arb_bn =
@@ -289,6 +368,46 @@ export default {
         }
       })
       this.fundArr = this.fundArr.filter(a => a.rate > 0.01)
+    },
+    fetchLevana() {
+      let month = this.now.getUTCMonth() * 1 + 1
+      let query = this.now.getUTCFullYear() + '-' + month + '-' + this.now.getUTCDate()
+      this.axios
+        .get(CORS_URL + 'https://indexer.levana.finance/funding-rates?market=osmo1hd7r733w49wrqnxx3daz4gy7kvdhgwsjwn28wj7msjfk4tde89aqjqhu8x&start_date=' + query + '&end_date=' + query)
+        .then(this.resLevana)
+        .catch(this.errRes)
+      this.axios
+        .get(CORS_URL + 'https://indexer.levana.finance/funding-rates?market=osmo127aqy4697zqn27z0vqr3x2n8lraf27t7udvl6ef5hcwmwhjadegq9vytdj&start_date=' + query + '&end_date=' + query)
+        .then(this.resLevana2)
+        .catch(this.errRes)
+      this.axios
+        .get(CORS_URL + 'https://indexer.levana.finance/funding-rates?market=osmo1ufpu3nudumzh53sek246zrwvv2cc7leplaqruuggeny7wlcvfrzq4cqmwd&start_date=' + query + '&end_date=' + query)
+        .then(this.resLevana3)
+        .catch(this.errRes)
+    },
+    resLevana(res) {
+      let data = res.data
+      this.atomFee_le = Math.round(data[data.length - 1].short_rate * 1000) / 10
+    },
+    resLevana2(res) {
+      let data = res.data
+      this.osmoFee = Math.round(data[data.length - 1].short_rate * 1000) / 10
+    },
+    resLevana3(res) {
+      let data = res.data
+      this.stFee = Math.round(data[data.length - 1].short_rate * 1000) / 10
+    },
+    resLevana4(res) {
+      let data = res.data
+      this.atom_lp = Math.round(data[data.length - 1].collateral_per_token * 1000) / 1000
+    },
+    resLevana5(res) {
+      let data = res.data
+      this.osmo_lp = Math.round(data[data.length - 1].collateral_per_token * 1000) / 1000
+    },
+    resLevana6(res) {
+      let data = res.data
+      this.st_lp = Math.round(data[data.length - 1].collateral_per_token * 1000) / 1000
     },
     fetchOsmoInfo() {
       this.axios
@@ -332,38 +451,104 @@ export default {
         this.usdc_mx = res.data.usdctwd.last
       }
     },
+    fetchBalance() {
+      this.axios
+        .get('https://lcd.osmosis.zone/cosmos/bank/v1beta1/balances/osmo1e7fcfaxpjlyf3h5qdpcr2qp0v5pctrqdkp2jl6')
+        .then(this.resBalance)
+        .catch(this.errRes)
+    },
+    resBalance(res) {
+      let usdcObj =
+          res.data.balances.find(a => 'ibc/498A0751C798A0D9A389AA3691123DADA57DAA4FE165D5C75894505B876BA6E4' == a.denom)
+      let axlUsdcObj =
+          res.data.balances.find(a => 'ibc/D189335C6E4A68B513C10AB227BF1C1D38C746766278BA3EEB4FB14124F1D858' == a.denom)
+      let osmoObj = res.data.balances.find(a => 'uosmo' == a.denom)
+      
+      let nowUsd = usdcObj ? usdcObj.amount * 1 : 0
+      nowUsd += axlUsdcObj ? axlUsdcObj.amount * 1 : 0
+      this.current_rev.nowUsd = Math.round(nowUsd / 100000) / 10
+      let nowOsmo = osmoObj ? osmoObj.amount * 1 : 0
+      this.current_rev.nowOsmo = Math.round(nowOsmo / 100000) / 10
+    },
+    fetchPos() {
+      this.axios
+        .get('https://api-osmosis-chain.imperator.co/cl/v1/position/create/osmo1e7fcfaxpjlyf3h5qdpcr2qp0v5pctrqdkp2jl6')
+        .then(this.resPos)
+        .catch(this.errRes)
+    },
+    resPos(res) {
+      if(!this.bHavePos) {
+        this.current_rev.posUsd = 0
+        this.current_rev.posOsmo = 0
+        this.updateCurrentRev()
+        return
+      }
+      let tmp = res.data.filter(a => 1221 == a.position.pool_id)
+      if(tmp && tmp.length > 0) {
+        let start = new Date(tmp[0].tx_time)
+        this.pos1221.period = Math.round((this.now - start) / 3600 / 100 - 80) / 10
+        this.pos1221.lower = (10000000 + tmp[0].position.lower_tick) / 10000000
+        this.pos1221.upper = (10000000 + tmp[0].position.upper_tick) / 10000000
+        
+        let obj = tmp[0].assets.find(a => 'ibc/498A0751C798A0D9A389AA3691123DADA57DAA4FE165D5C75894505B876BA6E4' == a.denom)
+        this.current_rev.posUsd = Math.round(obj.amount / 100000) / 10
+        obj = tmp[0].assets.find(a => 'uosmo' == a.denom)
+        this.current_rev.posOsmo = Math.round(obj.amount / 100000) / 10
+        
+        this.updateCurrentRev()
+      }
+    },
+    resPos2(res) {
+      let tmp = res.data.filter(a => 1136 == a.position.pool_id)
+      if(tmp && tmp.length > 0) {
+//        let start = new Date(tmp[0].tx_time)
+        let start = new Date('2023-11-01T18:00')
+        let end = new Date(this.pos1136.end)
+        this.pos1136.period = Math.round((end - start) / 3600 / 100 - 80) / 10
+        this.pos1136.value = Math.round(tmp[0].value)
+        this.pos1136.lower = (1000000 + tmp[0].position.lower_tick) / 1000000
+        this.pos1136.upper = (1000000 + tmp[0].position.upper_tick) / 1000000
+        
+        let stObj = tmp[0].assets.find(a => 'ibc/C140AFD542AE77BD7DCC83F13FDD8C5E5BB8C4929785E6EC2F4C636F98F17901' == a.denom)
+        this.pos1136.stValue = stObj.value * 1
+        this.pos1136.stAmt = stObj.amount / 1000000
+        let atomObj = tmp[0].assets.find(a => 'ibc/27394FB092D2ECCD56123C74F36E4C1F926001CEADA9CA97EA622B25F41E5EB2' == a.denom)
+        this.pos1136.atomAmt = atomObj.amount / 1000000
+      }
+    },
     fetchStart() {
+      this.now = new Date()
+      
       this.fetchPrior()
       
+      this.fetchBalance()
+      this.fetchPos()
+      
+      this.fetchLevana()
       this.fetchOsmoInfo()
       this.fetchMax()
       
-      this.checkCorsAlive()
-      
-      this.checkCondition()
       this.calPeriod()
+      this.checkCorsAlive()      
+      this.checkCondition()
       
       this.$refs.curve_pools.fetch()      
       this.$refs.borrow_rate.fetch()
     },
     fetchPrior() {
       this.fetchBinance()
-      this.fetchPool(1133, this.res1133)
+      this.fetchPool(1221, this.res1221)
     },
     fetchOsmoAll() {    
       this.fetchPool(833, this.res833)
-      this.fetchPool(840, this.res840)  
       this.fetchPool(1090, this.res1090)
       this.fetchPool(1134, this.res1134)
       this.fetchPool(1135, this.res1135)
       this.fetchPool(1136, this.res1136)
     },
     fetchPool(poolID, funcRes) {
-      this.axios 
-//        .get('https://lcd-osmosis.blockapsis.com/osmosis/gamm/v1beta1/pools/' + poolID)
-        .get('https://api-osmosis-ia.cosmosia.notional.ventures/osmosis/gamm/v1beta1/pools/' + poolID)
-//        .get('https://lcd-osmosis.keplr.app/osmosis/gamm/v1beta1/pools/' + poolID)
-//        .get('https://osmosis-api.polkachu.com/osmosis/gamm/v1beta1/pools/' + poolID)
+      this.axios
+        .get('https://lcd.osmosis.zone/osmosis/gamm/v1beta1/pools/' + poolID)  
         .then(funcRes)
         .catch(this.errRes)
     },
@@ -381,7 +566,7 @@ export default {
       let sqrt = res.data.pool.current_sqrt_price * 0.1
       this.price.wbtc.osm = Math.round(this.fixed_osmo / sqrt / sqrt * 10) / 10
     },
-    res1133(res) {
+    res1221(res) {
       let sqrt = res.data.pool.current_sqrt_price
       this.price.osmo.osm = Math.round(sqrt * sqrt * 10000) / 10000
       
@@ -425,9 +610,11 @@ export default {
       }
     },
     calPeriod() {
-      let now = new Date()
       let gmxStart = new Date('2023-08-13T01:15')
-      this.gmx_period = Math.round((now - gmxStart) / 36000 / 24) / 100
+      this.gmx_period = Math.round((this.now - gmxStart) / 36000 / 24) / 100
+    },
+    showPosDetail() {
+      this.bShowPosDetail = !this.bShowPosDetail
     },
   },
   computed: {
@@ -459,16 +646,65 @@ export default {
       return Math.round(this.gmx_rev / this.gmx_period * 365 / (this.price.eth.cex * 4.35) * 10000) / 100
     },
     eth_future_rev() {
-      let now = new Date()
       let end = new Date('2023-09-30T08:00')
-      let period = (end - now) / 3600 / 24 / 1000
+      let period = (end - this.now) / 3600 / 24 / 1000
       return Math.round(this.eth_future_div / this.price.eth.cex / period * 365 * 10000) / 100
     },
     btc_future_rev() {
-      let now = new Date()
       let end = new Date('2023-09-30T08:00')
-      let period = (end - now) / 3600 / 24 / 1000
+      let period = (end - this.now) / 3600 / 24 / 1000
       return Math.round(this.btc_future_div / this.price.wbtc.cex / period * 365 * 10000) / 100
+    },
+    calcRes() {
+      let liq = this.calc_liq * 1000000
+      if(this.calc_7d_fee > 1) {
+        return Math.round(this.calc_7d_fee / liq / 7 * 365 * 10000) / 100
+      }
+      let rev = this.calc_vol * 1000000 * this.calc_fee / 100 / 7 * 365
+      return Math.round(rev / liq * 10000) / 100
+    },
+    annual_1221() {
+      return Math.round(this.pos1221.reward / this.pos1221.period * 24 * 365)
+    },
+    apr_1221() {
+      return Math.round(this.annual_1221 / this.pos1221.value * 100 * 10) / 10
+    },
+    current_1221() {
+      let data = this.current_rev
+      let newOsmo =
+          data.nowOsmo + data.posOsmo + data.bn_osmo + data.fi_osmo - data.initOsmo
+      let newUsd =
+          data.nowUsd + data.posUsd + data.bn_usd + data.fi_usd - data.initUsd - data.deposit + this.fund_le + this.fee_le + this.fund_osmo_le + this.fee_osmo_le
+      return Math.round((newOsmo * this.fixed_osmo + newUsd) * 10) / 10
+    },
+    current_annual() {
+      return Math.round(this.current_1221 / this.current_rev.period * 24 * 365)
+    },
+    apr_current() {
+      return Math.round(this.current_annual / this.pos1221.value * 100 * 10) / 10
+    },
+    annual_1136() {
+      return Math.round(this.pos1136.reward / this.pos1136.period * 24 * 365)
+    },
+    apr_1136() {
+      return Math.round(this.annual_1136 / this.pos1136.value * 100 * 10) / 10
+    },
+    apr_1136_st() {
+      return Math.round(this.pos1136.stValue / this.pos1136.value * 17.74 * 10) / 10
+    },
+    total_annual() {
+      return Math.round(this.current_annual + this.annual_1136 + this.pos1136.stValue * 0.1774)
+    },
+    total_annual2() {
+      return Math.round(this.total_annual * this.usdt_mx / 1000) / 10
+    },
+    apr_total() {
+      return Math.round(this.total_annual / (this.pos1221.value + this.pos1136.value) * 100 * 10) / 10
+    },
+    total_atom() {
+      let st2atom = (this.collateral_le + this.pos1136.stAmt) * this.atom_redeem * 0.997
+      let fee2atom = (this.fee_le + this.fund_le) / this.price.atom.cex * 0.997
+      return Math.round((this.pos1136.atomAmt + st2atom + fee2atom + this.contract_atom) * 100) / 100
     },
   },
 }
@@ -511,10 +747,8 @@ export default {
     background: #c1d5e8;
     text-decoration: none;
   }
-  .s_grey {
-    font-weight: bolder;
+  .bg_grey {
     background: #d1d1d1;
-    text-decoration: none;
   }
   .div_cr {
     font-weight: bolder;

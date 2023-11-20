@@ -12,6 +12,8 @@
 </template>
 
 <script>
+  
+const CORS_URL = 'http://localhost:8088/'
 
 export default {
   data () {
@@ -53,12 +55,13 @@ export default {
       this.aaveData = res.data
     },
     fetchComp() {
+      // https://v3-api.compound.finance/market/all-networks/all-contracts/summary
       this.axios
         .get('https://v3-api.compound.finance/market/polygon-mainnet/0xF25212E676D1F7F89Cd72fFEe66158f541246445/historical/summary')
         .then(this.resCompPoly)
         .catch(this.errRes)
       this.axios
-        .get('https://v3-api.compound.finance/market/arbitrum-mainnet/0xA5EDBDD9646f8dFF606d7448e414884C7d905dCA/historical/summary')
+        .get('https://v3-api.compound.finance/market/arbitrum-mainnet/0x9c4ec768c28520B50860ea7a15bd7213a9fF58bf/historical/summary')
         .then(this.resCompAr)
         .catch(this.errRes)
       this.axios
@@ -89,7 +92,7 @@ export default {
       return {
         p: "137-0x2791bca1f2de4661ed88a30c99a7a9449aa84174-0xa97684ead0e402dc232d5a977953df7ecbab3cdb",
         p2: "0x2791bca1f2de4661ed88a30c99a7a9449aa841740xd05e3e715d945b59290df0ae8ef85c1bdb684744",
-        ar: "42161-0xff970a61a04b1ca14834a43f5de4533ebddb5cc8-0xa97684ead0e402dc232d5a977953df7ecbab3cdb",
+        ar: "42161-0xaf88d065e77c8cc2239327c5edb3a432268e5831-0xa97684ead0e402dc232d5a977953df7ecbab3cdb",
         op: "10-0x7f5c764cbc14f9669b88837ca1490cca17c31607-0xa97684ead0e402dc232d5a977953df7ecbab3cdb",
         e: "1-0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48-0x2f39d218133afab8f2b819b1066c7e434ad94e9e",
         e2: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb480xb53c1a33016b2dc2ff3653530bff1848a515c8c5",

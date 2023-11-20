@@ -15,13 +15,13 @@
     <a href="https://pancakeswap.finance/swap" target="_blank">Cake</a>&nbsp; 
     <a href="https://www.sushi.com/swap" target="_blank">Sushi</a><br> 
     <hr>
-    <a href="https://osmosis.marsprotocol.io/redbank" target="_blank">Mars</a>&nbsp;
-    <a href="https://app.aave.com/" target="_blank">Aave</a><br>
     <a href="https://app.radiant.capital/#/manage-radiant" target="_blank">Rdnt</a>&nbsp;
-    <a href="https://app.venus.io/" target="_blank">Venus</a><br>
-    <a href="https://app.compound.finance/markets?market=usdbc-basemainnet" target="_blank">Compound</a><br>
-    <a href="https://app.gmx.io/#/v2" target="_blank">GMX perp</a><br>
-    <a href="https://trade.levana.finance/stats?market=atom_usd" target="_blank">Levana</a><br>
+<!--    <a href="https://app.venus.io/" target="_blank">Venus</a><br>-->
+    <a href="https://app.aave.com/markets/" target="_blank">Aave</a><br>
+    <a href="https://app.gmx.io/#/v2" target="_blank">GMX</a>&nbsp;
+    <a href="https://app.compound.finance/markets?market=usdbc-basemainnet" target="_blank">Comp</a><br>
+    <a href="https://trade.levana.finance/osmosis/trade/OSMO_USD" target="_blank">Levana</a>&nbsp;
+    <a href="https://trade.levana.finance/stats?market=osmo_usd" target="_blank">LP</a><br>
     <hr>
 <!--
     <a href="https://ycharts.com/indicators/3_month_t_bill" target="_blank">T-bill chart</a><br>
@@ -38,6 +38,7 @@
     <a href="https://info.osmosis.zone/dashboard/trades" target="_blank">Osm-rec</a>&nbsp;
     <a href="https://info.osmosis.zone/token/OSMO" target="_blank">價</a><br>
     <a href="https://www.mintscan.io/osmosis/accounts/osmo1e7fcfaxpjlyf3h5qdpcr2qp0v5pctrqdkp2jl6" target="_blank">Osmo-rec2</a><br>
+    <a href="https://www.mintscan.io/osmosis/accounts/osmo1m33zxjmdudyusrwx8yry5kkunhc780947g8akg" target="_blank">Osmo-rec3</a><br>
     <a href="https://www.mintscan.io/kava/account/kava14txy4lhmrszmwkqa64nszzrj47p8cd38355vr4" target="_blank">Kava-rec</a><br>
     <a href="https://explorer.binance.org/address/bnb1ff7pg9eq5hrnd5euaycwce9pt8ed6k0ya2pgke" target="_blank">Bnb-rec</a><br>
     <a href="https://www.bscscan.com/address/0x7575d9eb64CCe0DF0D570Ae88049382Ce6fB0D31" target="_blank">Bsc-rec</a>
