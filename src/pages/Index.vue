@@ -158,8 +158,8 @@ export default {
         end: '2023-11-10T19:30', period: 1, reward: 32.5,
         value: 1, stValue: 1, atomAmt: 1, stAmt: 1, lower: 1, upper: 1,
       },
-      contract_atom: -1000, // le: 0atm
-      collateral_le: 159.2, // st-atom
+      contract_atom: -900, // le: 0atm
+      collateral_le: 3.1, // st-atom
       fee_le: 0, //usd 前期已支付=42
       fund_le: 0, //usd 前期已有172.33
       fee_osmo_le: -140, // 攤提一半
