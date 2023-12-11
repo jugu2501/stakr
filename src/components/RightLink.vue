@@ -19,9 +19,9 @@
 <!--    <a href="https://app.venus.io/" target="_blank">Venus</a><br>-->
     <a href="https://app.aave.com/markets/" target="_blank">Aave</a><br>
     <a href="https://app.gmx.io/#/v2" target="_blank">GMX</a>&nbsp;
-    <a href="https://app.compound.finance/markets?market=usdbc-basemainnet" target="_blank">Comp</a><br>
+    <a href="https://app.compound.finance/markets" target="_blank">Comp</a><br>
     <a href="https://trade.levana.finance/osmosis/trade/OSMO_USD" target="_blank">Levana</a>&nbsp;
-    <a href="https://trade.levana.finance/stats?market=osmo_usd" target="_blank">LP</a><br>
+    <a href="https://dydx.trade/#/markets" target="_blank">Dydx</a><br>
     <hr>
 <!--
     <a href="https://ycharts.com/indicators/3_month_t_bill" target="_blank">T-bill chart</a><br>

@@ -57,17 +57,30 @@ export default {
     fetchComp() {
       // https://v3-api.compound.finance/market/all-networks/all-contracts/summary
       this.axios
-        .get('https://v3-api.compound.finance/market/polygon-mainnet/0xF25212E676D1F7F89Cd72fFEe66158f541246445/historical/summary')
-        .then(this.resCompPoly)
+        .get('https://v3-api.compound.finance/market/all-networks/all-contracts/summary')
+        .then(this.resComp)
         .catch(this.errRes)
-      this.axios
-        .get('https://v3-api.compound.finance/market/arbitrum-mainnet/0x9c4ec768c28520B50860ea7a15bd7213a9fF58bf/historical/summary')
-        .then(this.resCompAr)
-        .catch(this.errRes)
-      this.axios
-        .get('https://v3-api.compound.finance/market/base-mainnet/0x9c4ec768c28520B50860ea7a15bd7213a9fF58bf/historical/summary')
-        .then(this.resCompBa)
-        .catch(this.errRes)
+//      this.axios
+//        .get('https://v3-api.compound.finance/market/polygon-mainnet/0xF25212E676D1F7F89Cd72fFEe66158f541246445/historical/summary')
+//        .then(this.resCompPoly)
+//        .catch(this.errRes)
+//      this.axios
+//        .get('https://v3-api.compound.finance/market/arbitrum-mainnet/0x9c4ec768c28520B50860ea7a15bd7213a9fF58bf/historical/summary')
+//        .then(this.resCompAr)
+//        .catch(this.errRes)
+//      this.axios
+//        .get('https://v3-api.compound.finance/market/base-mainnet/0x9c4ec768c28520B50860ea7a15bd7213a9fF58bf/historical/summary')
+//        .then(this.resCompBa)
+//        .catch(this.errRes)
+    },
+    resComp(res) {
+      let objArr = res.data
+      let tmpObj = objArr.find(a => this.comp_usdc.p == a.comet.address)
+      this.compRate.p = Math.round(tmpObj.borrow_apr * 10000) / 100
+      tmpObj = objArr.find(a => (42161 == a.chain_id) && (this.comp_usdc.ar == a.comet.address))
+      this.compRate.ar = Math.round(tmpObj.borrow_apr * 10000) / 100
+      tmpObj = objArr.find(a => (8453 == a.chain_id) && (this.comp_usdc.ar == a.comet.address))
+      this.compRate.ba = Math.round(tmpObj.borrow_apr * 10000) / 100
     },
     resCompPoly(res) {
       let idx = res.data.length - 1
@@ -88,6 +101,12 @@ export default {
     },
   },
   computed: {
+    comp_usdc() {
+      return {
+        p: "0xF25212E676D1F7F89Cd72fFEe66158f541246445",
+        ar: "0x9c4ec768c28520B50860ea7a15bd7213a9fF58bf",
+      }
+    },
     usdc() {
       return {
         p: "137-0x2791bca1f2de4661ed88a30c99a7a9449aa84174-0xa97684ead0e402dc232d5a977953df7ecbab3cdb",

@@ -58,9 +58,14 @@
     </div>
     <div class="omo_block">
       <SimpPrice ref="wbtc" symbol="WBTC" :priceData="price" :base="'cex'" :compare="'osm'"></SimpPrice>
-      <SimpPrice ref="eth" symbol="ETH" :priceData="price" :base="'cex'" :compare="'osm'"></SimpPrice><br>
+      [Q4] {{price.wbtc.cm}} <a class="s_red">{{btc_cm_div}}%</a>&nbsp;&nbsp;
+      [Q1] {{price.wbtc.cm2}} <a class="s_red">{{btc_cm_div2}}%</a><br>
+      <SimpPrice ref="eth" symbol="ETH" :priceData="price" :base="'cex'" :compare="'osm'"></SimpPrice>
+      [Q4] {{price.eth.cm}} <a class="s_red">{{eth_cm_div}}%</a>&nbsp;&nbsp;
+      [Q1] {{price.eth.cm2}} <a class="s_red">{{eth_cm_div2}}%</a><br><br>
       <SimpPrice ref="atom" symbol="ATOM" :priceData="price" :base="'cex'" :compare="'osm'"></SimpPrice>
       <SimpPrice ref="osmo" symbol="OSMO" :priceData="price" :base="'cex'" :compare="'osm'"></SimpPrice><br>
+<!--
       == Position ========&nbsp;&nbsp;<input v-model=pos1221.reward style="width:60px"><br>
       <input type="checkbox" v-model=bHavePos>&nbsp;&nbsp;<b>[1221]</b>&nbsp;&nbsp;估年收 {{annual_1221}}&nbsp;&nbsp;apr {{apr_1221}}%
       &nbsp;&nbsp;<a @click="showPosDetail()">[+]</a><br>
@@ -79,7 +84,8 @@
       </div>
       &nbsp;&nbsp;&nbsp;&nbsp;當期 {{current_1221}}&nbsp;&nbsp;&nbsp;估年收 {{current_annual}} &nbsp;&nbsp;&nbsp;apr {{apr_current}}%<br>
       &nbsp;&nbsp;&nbsp;&nbsp;NT<a class="div_ju">{{total_annual2}}萬</a>&nbsp;&nbsp;總年收 {{total_annual}} &nbsp;&nbsp;&nbsp;apr {{apr_total}}%
-      <br><br>      
+      <br><br>
+-->
       == Levana ======== atom: {{total_atom}}<br>
       [Atom Fee] apr <a class="s_red">{{atomFee_le}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;
       [LP]&nbsp; {{atom_lp}}
@@ -89,9 +95,21 @@
       <br>
       [st Fee] apr <a class="s_red">{{stFee}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;
       [LP]&nbsp; {{st_lp}}
+      <br>
+      [stO] <a class="s_red">{{stOsmoFee}}%</a>&nbsp;&nbsp;&nbsp;
+      [BTC] <a class="s_red">{{btcFee_le}}%</a>&nbsp;&nbsp;&nbsp;
+      [ETH] <a class="s_red">{{ethFee_le}}%</a>
       <br><br>
       <input type="checkbox" v-model=bShowStBuy> Buying St&nbsp;&nbsp;
-      <br>
+      &nbsp;&nbsp;<a @click="showPosDetail()">[+]</a><br>
+      <div v-show="bShowPosDetail" class="bg_grey">
+        &nbsp;&nbsp;&nbsp;&nbsp;{{pos1221.upper}}/{{pos1221.lower}}&nbsp;&nbsp;
+        {{pos1221.period}}h<br>
+        <b>[1136]</b> {{pos1136.upper}}/{{pos1136.lower}}&nbsp;&nbsp;
+        {{pos1136.period}}h&nbsp;&nbsp;&nbsp;${{pos1136.value}}<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;估年收 {{annual_1136}}&nbsp;&nbsp;
+        apr {{apr_1136}}% + st {{apr_1136_st}}%
+      </div>
       [stOs] {{osmo_redeem}} ~ osm {{st_osmo}}&nbsp;&nbsp;<a :href="genLink(833)" target="_blank" class="div_ju">{{st_osmo_div}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;0.3
       <br>
       [stAt] {{atom_redeem}} ~ osm {{st_atom}}&nbsp;&nbsp;<a :href="genLink(1136)" target="_blank" class="div_ju">{{st_atom_div}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;0.3
@@ -140,8 +158,8 @@ export default {
       price: {
         atom: {osm: 1, ju: 1, kv: 1, cex: 1},
         osmo: {osm: 1, ju: 1, cex: 1},
-        wbtc: {osm: 1, cex: 1},
-        eth: {osm: 1, cex: 1},
+        wbtc: {osm: 1, cex: 1, ft: 1, cm: 1, cm2: 1},
+        eth: {osm: 1, cex: 1, ft: 1, cm2: 1},
         bnb: {osm: 1, cex: 1},
       },
       
@@ -158,8 +176,8 @@ export default {
         end: '2023-11-10T19:30', period: 1, reward: 32.5,
         value: 1, stValue: 1, atomAmt: 1, stAmt: 1, lower: 1, upper: 1,
       },
-      contract_atom: -900, // le: 0atm
-      collateral_le: 3.1, // st-atom
+      contract_atom: -1000, // le: 0atm
+      collateral_le: 159.2, // st-atom
       fee_le: 0, //usd 前期已支付=42
       fund_le: 0, //usd 前期已有172.33
       fee_osmo_le: -140, // 攤提一半
@@ -185,8 +203,11 @@ export default {
       dogeFee: 1,
       
       atomFee_le: 1,
+      btcFee_le: 1,
+      ethFee_le: 1,
       osmoFee: 1,
       stFee: 1,
+      stOsmoFee: 1,
       atom_lp: 1,
       osmo_lp: 1,
       st_lp: 1,
@@ -350,14 +371,24 @@ export default {
     },
     resAtomFee(res) {
       let btcObj = res.data.find(a => 'BTCUSDT' == a.symbol)
+      let btcObj2 = res.data.find(a => 'BTCUSDT_231229' == a.symbol)
+      let btcObj3 = res.data.find(a => 'BTCUSDT_240329' == a.symbol)
       let atomObj = res.data.find(a => 'ATOMUSDT' == a.symbol)
       let ethObj = res.data.find(a => 'ETHUSDT' == a.symbol)
+      let ethObj2 = res.data.find(a => 'ETHUSDT_231229' == a.symbol)
+      let ethObj3 = res.data.find(a => 'ETHUSDT_240329' == a.symbol)
       let bnbObj = res.data.find(a => 'BNBUSDT' == a.symbol)
       let bchObj = res.data.find(a => 'BCHUSDT' == a.symbol)
       let dogeObj = res.data.find(a => 'DOGEUSDT' == a.symbol)
       this.btcFee = Math.round(btcObj.lastFundingRate * 10000000000) / 100000000
+      this.price.wbtc.ft = Math.round(btcObj.markPrice * 10) / 10
+      this.price.wbtc.cm = Math.round(btcObj2.markPrice * 10) / 10
+      this.price.wbtc.cm2 = Math.round(btcObj3.markPrice * 10) / 10
       this.atomFee = Math.round(atomObj.lastFundingRate * 10000000000) / 100000000
       this.ethFee = Math.round(ethObj.lastFundingRate * 10000000000) / 100000000
+      this.price.eth.ft = Math.round(ethObj.markPrice * 10) / 10
+      this.price.eth.cm = Math.round(ethObj2.markPrice * 10) / 10
+      this.price.eth.cm2 = Math.round(ethObj3.markPrice * 10) / 10
       this.bnbFee = Math.round(bnbObj.lastFundingRate * 10000000000) / 100000000
       this.bchFee = Math.round(bchObj.lastFundingRate * 10000000000) / 100000000
       this.dogeFee = Math.round(dogeObj.lastFundingRate * 10000000000) / 100000000
@@ -372,30 +403,33 @@ export default {
     fetchLevana() {
       let month = this.now.getUTCMonth() * 1 + 1
       let query = this.now.getUTCFullYear() + '-' + month + '-' + this.now.getUTCDate()
+      
       this.axios
-        .get(CORS_URL + 'https://indexer.levana.finance/funding-rates?market=osmo1hd7r733w49wrqnxx3daz4gy7kvdhgwsjwn28wj7msjfk4tde89aqjqhu8x&start_date=' + query + '&end_date=' + query)
+        .get('https://querier-mainnet.levana.finance/v1/perps/markets?network=osmosis-mainnet&factory=osmo1ssw6x553kzqher0earlkwlxasfm2stnl3ms3ma2zz4tnajxyyaaqlucd45')
         .then(this.resLevana)
         .catch(this.errRes)
-      this.axios
-        .get(CORS_URL + 'https://indexer.levana.finance/funding-rates?market=osmo127aqy4697zqn27z0vqr3x2n8lraf27t7udvl6ef5hcwmwhjadegq9vytdj&start_date=' + query + '&end_date=' + query)
-        .then(this.resLevana2)
-        .catch(this.errRes)
-      this.axios
-        .get(CORS_URL + 'https://indexer.levana.finance/funding-rates?market=osmo1ufpu3nudumzh53sek246zrwvv2cc7leplaqruuggeny7wlcvfrzq4cqmwd&start_date=' + query + '&end_date=' + query)
-        .then(this.resLevana3)
-        .catch(this.errRes)
+//      this.axios
+//        .get(CORS_URL + 'https://indexer.levana.finance/funding-rates?market=osmo1hd7r733w49wrqnxx3daz4gy7kvdhgwsjwn28wj7msjfk4tde89aqjqhu8x&start_date=' + query + '&end_date=' + query)
     },
     resLevana(res) {
-      let data = res.data
-      this.atomFee_le = Math.round(data[data.length - 1].short_rate * 1000) / 10
-    },
-    resLevana2(res) {
-      let data = res.data
-      this.osmoFee = Math.round(data[data.length - 1].short_rate * 1000) / 10
-    },
-    resLevana3(res) {
-      let data = res.data
-      this.stFee = Math.round(data[data.length - 1].short_rate * 1000) / 10
+        let markets = res.data.markets
+        let tmpObj = markets.find(a => a.status.base == 'ATOM')
+        this.atomFee_le = Math.round(tmpObj.status.short_funding * 1000) / 10
+        
+        tmpObj = markets.find(a => a.status.base == 'OSMO')
+        this.osmoFee = Math.round(tmpObj.status.short_funding * 1000) / 10
+        
+        tmpObj = markets.find(a => a.status.base == 'stATOM')
+        this.stFee = Math.round(tmpObj.status.short_funding * 1000) / 10
+        
+        tmpObj = markets.find(a => a.status.base == 'stOSMO')
+        this.stOsmoFee = Math.round(tmpObj.status.short_funding * 1000) / 10
+        
+        tmpObj = markets.find(a => a.status.base == 'BTC')
+        this.btcFee_le = Math.round(tmpObj.status.short_funding * 1000) / 10
+        
+        tmpObj = markets.find(a => a.status.base == 'axlETH')
+        this.ethFee_le = Math.round(tmpObj.status.short_funding * 1000) / 10
     },
     resLevana4(res) {
       let data = res.data
@@ -531,9 +565,9 @@ export default {
       this.calPeriod()
       this.checkCorsAlive()      
       this.checkCondition()
-      
-      this.$refs.curve_pools.fetch()      
+           
       this.$refs.borrow_rate.fetch()
+      this.$refs.curve_pools.fetch() 
     },
     fetchPrior() {
       this.fetchBinance()
@@ -705,6 +739,30 @@ export default {
       let st2atom = (this.collateral_le + this.pos1136.stAmt) * this.atom_redeem * 0.997
       let fee2atom = (this.fee_le + this.fund_le) / this.price.atom.cex * 0.997
       return Math.round((this.pos1136.atomAmt + st2atom + fee2atom + this.contract_atom) * 100) / 100
+    },
+    cm_period() {
+      let end = new Date('2023-12-29T08:00')
+      return (end - this.now) / 3600 / 24 / 1000  // days
+    },
+    cm_period2() {
+      let end = new Date('2024-03-29T08:00')
+      return (end - this.now) / 3600 / 24 / 1000  // days
+    },
+    btc_cm_div() {
+      let apr = (this.price.wbtc.cm / this.price.wbtc.ft - 1) * this.cm_period / 365
+      return Math.round(apr * 10000) / 100
+    },
+    btc_cm_div2() {
+      let apr = (this.price.wbtc.cm2 / this.price.wbtc.ft - 1) * this.cm_period2 / 365
+      return Math.round(apr * 10000) / 100
+    },
+    eth_cm_div() {
+      let apr = (this.price.eth.cm / this.price.eth.ft - 1) * this.cm_period / 365
+      return Math.round(apr * 10000) / 100
+    },
+    eth_cm_div2() {
+      let apr = (this.price.eth.cm2 / this.price.eth.ft - 1) * this.cm_period2 / 365
+      return Math.round(apr * 10000) / 100
     },
   },
 }
