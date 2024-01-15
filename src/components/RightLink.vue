@@ -11,7 +11,8 @@
     <a href="https://app.squidrouter.com/" target="_blank">Squid</a><br> 
 <!--    <a href="https://app.multichain.org/#/router" target="_blank">Multi-chain</a><br>-->
     <hr>
-    <a href="https://app.uniswap.org/#/swap" target="_blank">UniSwap</a><br> 
+    <a href="https://app.uniswap.org/#/swap" target="_blank">Uni</a>&nbsp;
+    <a href="https://app.venus.io/#/core-pool?chainId=56" target="_blank">Venus</a><br>  
     <a href="https://pancakeswap.finance/swap" target="_blank">Cake</a>&nbsp; 
     <a href="https://www.sushi.com/swap" target="_blank">Sushi</a><br> 
     <hr>

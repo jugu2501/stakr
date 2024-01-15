@@ -5,9 +5,13 @@
   [Poly]&nbsp;&nbsp;<a class="div_ju">{{rate(usdc.p)}}%</a>&nbsp;&nbsp;<a class="div_cr">{{rate(usdt.p)}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;eth-<a class="s_red">{{rate(eth.p)}}%</a><br>
   [P-v2]&nbsp;&nbsp;<a class="div_ju">{{rate(usdc.p2)}}%</a>&nbsp;&nbsp;<a class="div_cr">{{rate(usdt.p2)}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;eth-<a class="s_red">{{rate(eth.p2)}}%</a><br>
   [Opti]&nbsp;&nbsp;<a class="div_ju">{{rate(usdc.op)}}%</a>&nbsp;&nbsp;<a class="div_cr">{{rate(usdt.op)}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;eth-<a class="s_red">{{rate(eth.op)}}%</a><br>
+<!--
   [Eth]&nbsp;&nbsp;<a class="div_ju">{{rate(usdc.e)}}%</a>&nbsp;&nbsp;<a class="div_cr">{{rate(usdt.e)}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;eth-<a class="s_red">{{rate(eth.e)}}%</a><br>
   [E-v2]&nbsp;&nbsp;<a class="div_ju">{{rate(usdc.e2)}}%</a>&nbsp;&nbsp;<a class="div_cr">{{rate(usdt.e2)}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;eth-<a class="s_red">{{rate(eth.e2)}}%</a><br>
+-->
+  [Venus]&nbsp;&nbsp;<a class="div_ju">{{venusRate.usdc}}%</a>&nbsp;&nbsp;<a class="div_cr">{{venusRate.usdt}}%</a>&nbsp;(supply)<br>
   [Comp]&nbsp;&nbsp;p-<a class="div_ju">{{compRate.p}}%</a>&nbsp;&nbsp;ar-<a class="div_ju">{{compRate.ar}}%</a>&nbsp;&nbsp;ba-<a class="div_ju">{{compRate.ba}}%</a>
+  {{msg}}
 </div>
 </template>
 
@@ -22,6 +26,7 @@ export default {
       bShowMore: false,
       aaveData: {},
       compRate: {},
+      venusRate: {},
     }
   },
 //  props: ['symbol', 'priceData', 'compareDex'],
@@ -37,6 +42,7 @@ export default {
     fetch() {
       this.fetchAave()
       this.fetchComp()
+      this.fetchVenus()
     },
     rate(id) {
       if(this.aaveData && this.aaveData.reserves) {
@@ -47,12 +53,34 @@ export default {
     },
     fetchAave() {
       this.axios
-        .get('https://aave-api-v2.aave.com/data/markets-data')
+        .get(CORS_URL + 'https://aave-api-v2.aave.com/data/markets-data')
         .then(this.resAave)
         .catch(this.errRes)
     },
     resAave(res) {
       this.aaveData = res.data
+    },
+    fetchVenus() {
+      this.axios
+        .get('https://api.venus.io/markets/core-pool?address=' + this.venus_addr.usdc)
+        .then(this.resVenus)
+        .catch(this.errRes)
+      this.axios
+        .get('https://api.venus.io/markets/core-pool?address=' + this.venus_addr.usdt)
+        .then(this.resVenus2)
+        .catch(this.errRes)
+    },
+    resVenus(res) {
+      let objArr = res.data.result
+      let tmpObj = objArr.find(a => this.venus_addr.usdc == a.address)
+      this.venusRate.usdc = Math.round(tmpObj.supplyApy * 100) / 100
+//      this.venusRate.usdc = Math.round(tmpObj.borrowApy * 100) / 100
+    },
+    resVenus2(res) {
+      let objArr = res.data.result
+      let tmpObj = objArr.find(a => this.venus_addr.usdt == a.address)
+      this.venusRate.usdt = Math.round(tmpObj.supplyApy * 100) / 100
+//      this.venusRate.usdc = Math.round(tmpObj.borrowApy * 100) / 100
     },
     fetchComp() {
       // https://v3-api.compound.finance/market/all-networks/all-contracts/summary
@@ -101,6 +129,13 @@ export default {
     },
   },
   computed: {
+    venus_addr() {
+      return {
+        usdc: "0xecA88125a5ADbe82614ffC12D0DB554E2e2867C8",
+        usdt: "0xfD5840Cd36d94D7229439859C0112a4185BC0255",
+        eth: "0xf508fCD89b8bd15579dc79A6827cB4686A3592c8",
+      }
+    },
     comp_usdc() {
       return {
         p: "0xF25212E676D1F7F89Cd72fFEe66158f541246445",

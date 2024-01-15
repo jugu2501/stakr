@@ -19,7 +19,8 @@
       <br>
       [BTC Fee] <a class="s_red">{{btcFee}}%</a><br>
       [ETH Fee] <a class="s_red">{{ethFee}}%</a><br>
-      [ATOM Fee] <a class="s_red">{{atomFee}}%</a><br><br>
+      [ATOM Fee] <a class="s_red">{{atomFee}}%</a><br>
+      [DYX Fee] <a class="s_red">{{dydxFee}}%</a><br><br>
       [BNB Fee] <a class="s_red">{{bnbFee}}%</a><br>
       [DOGE Fee] <a class="s_red">{{dogeFee}}%</a><br>
       [BCH Fee] <a class="s_red">{{bchFee}}%</a><br>
@@ -176,8 +177,8 @@ export default {
         end: '2023-11-10T19:30', period: 1, reward: 32.5,
         value: 1, stValue: 1, atomAmt: 1, stAmt: 1, lower: 1, upper: 1,
       },
-      contract_atom: -1000, // le: 0atm
-      collateral_le: 159.2, // st-atom
+      contract_atom: 0, // le: 0atm
+      collateral_le: 7.93, // st-atom
       fee_le: 0, //usd 前期已支付=42
       fund_le: 0, //usd 前期已有172.33
       fee_osmo_le: -140, // 攤提一半
@@ -198,6 +199,7 @@ export default {
       atomFee: 1,
       btcFee: 1,
       ethFee: 1,
+      dydxFee: 1,
       bnbFee: 1,
       bchFee: 1,
       dogeFee: 1,
@@ -371,12 +373,13 @@ export default {
     },
     resAtomFee(res) {
       let btcObj = res.data.find(a => 'BTCUSDT' == a.symbol)
-      let btcObj2 = res.data.find(a => 'BTCUSDT_231229' == a.symbol)
-      let btcObj3 = res.data.find(a => 'BTCUSDT_240329' == a.symbol)
+      let btcObj2 = res.data.find(a => 'BTCUSDT_240329' == a.symbol)
+      let btcObj3 = res.data.find(a => 'BTCUSDT_240628' == a.symbol)
       let atomObj = res.data.find(a => 'ATOMUSDT' == a.symbol)
       let ethObj = res.data.find(a => 'ETHUSDT' == a.symbol)
-      let ethObj2 = res.data.find(a => 'ETHUSDT_231229' == a.symbol)
-      let ethObj3 = res.data.find(a => 'ETHUSDT_240329' == a.symbol)
+      let ethObj2 = res.data.find(a => 'ETHUSDT_240329' == a.symbol)
+      let ethObj3 = res.data.find(a => 'ETHUSDT_240628' == a.symbol)
+      let dydxObj = res.data.find(a => 'DYDXUSDT' == a.symbol)
       let bnbObj = res.data.find(a => 'BNBUSDT' == a.symbol)
       let bchObj = res.data.find(a => 'BCHUSDT' == a.symbol)
       let dogeObj = res.data.find(a => 'DOGEUSDT' == a.symbol)
@@ -389,6 +392,7 @@ export default {
       this.price.eth.ft = Math.round(ethObj.markPrice * 10) / 10
       this.price.eth.cm = Math.round(ethObj2.markPrice * 10) / 10
       this.price.eth.cm2 = Math.round(ethObj3.markPrice * 10) / 10
+      this.dydxFee = Math.round(dydxObj.lastFundingRate * 10000000000) / 100000000
       this.bnbFee = Math.round(bnbObj.lastFundingRate * 10000000000) / 100000000
       this.bchFee = Math.round(bchObj.lastFundingRate * 10000000000) / 100000000
       this.dogeFee = Math.round(dogeObj.lastFundingRate * 10000000000) / 100000000
@@ -724,7 +728,7 @@ export default {
       return Math.round(this.annual_1136 / this.pos1136.value * 100 * 10) / 10
     },
     apr_1136_st() {
-      return Math.round(this.pos1136.stValue / this.pos1136.value * 17.74 * 10) / 10
+      return Math.round(this.pos1136.stValue / this.pos1136.value * 12.9 * 10) / 10
     },
     total_annual() {
       return Math.round(this.current_annual + this.annual_1136 + this.pos1136.stValue * 0.1774)
@@ -741,27 +745,27 @@ export default {
       return Math.round((this.pos1136.atomAmt + st2atom + fee2atom + this.contract_atom) * 100) / 100
     },
     cm_period() {
-      let end = new Date('2023-12-29T08:00')
-      return (end - this.now) / 3600 / 24 / 1000  // days
-    },
-    cm_period2() {
       let end = new Date('2024-03-29T08:00')
       return (end - this.now) / 3600 / 24 / 1000  // days
     },
+    cm_period2() {
+      let end = new Date('2024-06-28T08:00')
+      return (end - this.now) / 3600 / 24 / 1000  // days
+    },
     btc_cm_div() {
-      let apr = (this.price.wbtc.cm / this.price.wbtc.ft - 1) * this.cm_period / 365
+      let apr = (this.price.wbtc.cm / this.price.wbtc.ft - 1) / this.cm_period * 365
       return Math.round(apr * 10000) / 100
     },
     btc_cm_div2() {
-      let apr = (this.price.wbtc.cm2 / this.price.wbtc.ft - 1) * this.cm_period2 / 365
+      let apr = (this.price.wbtc.cm2 / this.price.wbtc.ft - 1) / this.cm_period2 * 365
       return Math.round(apr * 10000) / 100
     },
     eth_cm_div() {
-      let apr = (this.price.eth.cm / this.price.eth.ft - 1) * this.cm_period / 365
+      let apr = (this.price.eth.cm / this.price.eth.ft - 1) / this.cm_period * 365
       return Math.round(apr * 10000) / 100
     },
     eth_cm_div2() {
-      let apr = (this.price.eth.cm2 / this.price.eth.ft - 1) * this.cm_period2 / 365
+      let apr = (this.price.eth.cm2 / this.price.eth.ft - 1) / this.cm_period2 * 365
       return Math.round(apr * 10000) / 100
     },
   },
