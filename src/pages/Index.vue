@@ -5,39 +5,26 @@
     <div class="omo_block">
       <input type="checkbox" v-model=bShowNotice> All&nbsp;&nbsp;
       <input type="checkbox" v-model=bStNotice> St&nbsp;&nbsp;
-      <input type="checkbox" v-model=bAxlNotice> Axl&nbsp;&nbsp;
       <input type="checkbox" v-model=bRateNotice> Rate
-      <input type="checkbox" v-model=bUpdateMaxDc> MxDc
-      <br><br>
+      <input type="checkbox" v-model=bUpdateMaxDc> MxDc<br>
       == Cex-Usdc ======== <br>
       Bn: {{usdc_bn}}/{{busd_bn}}&nbsp;&nbsp; 
 <!--      Max: {{dcdt_mx}}&nbsp;&nbsp;<br>-->
       <br>
       [TWD]&nbsp; {{usdt_mx}}&nbsp;&nbsp;<input v-model=usdc_mx style="width:80px">&nbsp;&nbsp;dc: {{usdc_mx_div}}
       <br><br>
-      <CurvePools ref="curve_pools"/> 
-      <br>
-      [BTC Fee] <a class="s_red">{{btcFee}}%</a><br>
-      [ETH Fee] <a class="s_red">{{ethFee}}%</a><br>
-      [ATOM Fee] <a class="s_red">{{atomFee}}%</a><br>
-      [DYX Fee] <a class="s_red">{{dydxFee}}%</a><br><br>
-      [BNB Fee] <a class="s_red">{{bnbFee}}%</a><br>
-      [DOGE Fee] <a class="s_red">{{dogeFee}}%</a><br>
-      [BCH Fee] <a class="s_red">{{bchFee}}%</a><br>
-      <br>
-      <div v-for="fund in fundArr">
-        {{fund.symbol}}: {{fund.rate}}%
-      </div>
+      <BorrowRate ref="borrow_rate"/>
       <br><br><br>
     </div>
-    <div class="omo_block">
-      Gmx rev: <input v-model=gmx_rev style="width:80px"> / {{gmx_period}}天 = {{gmx_annual}}%<br>
-      cost: {{eth_cost}}&nbsp;&nbsp;&nbsp;&nbsp;short rev: {{short_annual}}%<br>
-      Eth Future rrev: <input v-model=eth_future_div style="width:80px"> {{eth_future_rev}}%<br>
-      Btc Future rrev: <input v-model=btc_future_div style="width:80px"> {{btc_future_rev}}%
-      <br><br>
-      <BorrowRate ref="borrow_rate"/>
-      <br>
+    <div class="omo_block"><br>
+      <SimpPrice ref="wbtc" symbol="WBTC" :priceData="price" :base="'cex'" :compare="'osm'"></SimpPrice>
+      [Q4] {{price.wbtc.cm}} <a class="s_red">{{btc_cm_div}}%</a>&nbsp;&nbsp;
+      [Q1] {{price.wbtc.cm2}} <a class="s_red">{{btc_cm_div2}}%</a><br>
+      <SimpPrice ref="eth" symbol="ETH" :priceData="price" :base="'cex'" :compare="'osm'"></SimpPrice>
+      [Q4] {{price.eth.cm}} <a class="s_red">{{eth_cm_div}}%</a>&nbsp;&nbsp;
+      [Q1] {{price.eth.cm2}} <a class="s_red">{{eth_cm_div2}}%</a><br><br>
+      <SimpPrice ref="atom" symbol="ATOM" :priceData="price" :base="'cex'" :compare="'osm'"></SimpPrice>
+      <SimpPrice ref="osmo" symbol="OSMO" :priceData="price" :base="'cex'" :compare="'osm'"></SimpPrice><br>
       [<a href="https://www.coingecko.com/zh-tw/數字貨幣/radiant-capital" target="_blank">Rdnt</a>]&nbsp; {{rdnt_bn}}&nbsp;&nbsp;&nbsp;&nbsp;
       [Bnb]&nbsp; {{price.bnb.cex}}
       <br>
@@ -55,17 +42,21 @@
       <br>
       [<a href="https://info.osmosis.zone/token/LIKE" target="_blank">Like</a>]&nbsp; {{like_info}}&nbsp;&nbsp;&nbsp;&nbsp;
       [Ion]&nbsp; {{ion_info}}
-      <br><br><br>
-    </div>
-    <div class="omo_block">
-      <SimpPrice ref="wbtc" symbol="WBTC" :priceData="price" :base="'cex'" :compare="'osm'"></SimpPrice>
-      [Q4] {{price.wbtc.cm}} <a class="s_red">{{btc_cm_div}}%</a>&nbsp;&nbsp;
-      [Q1] {{price.wbtc.cm2}} <a class="s_red">{{btc_cm_div2}}%</a><br>
-      <SimpPrice ref="eth" symbol="ETH" :priceData="price" :base="'cex'" :compare="'osm'"></SimpPrice>
-      [Q4] {{price.eth.cm}} <a class="s_red">{{eth_cm_div}}%</a>&nbsp;&nbsp;
-      [Q1] {{price.eth.cm2}} <a class="s_red">{{eth_cm_div2}}%</a><br><br>
-      <SimpPrice ref="atom" symbol="ATOM" :priceData="price" :base="'cex'" :compare="'osm'"></SimpPrice>
-      <SimpPrice ref="osmo" symbol="OSMO" :priceData="price" :base="'cex'" :compare="'osm'"></SimpPrice><br>
+      <br><br>
+      <input type="checkbox" v-model=bShowStBuy> Buying St&nbsp;&nbsp;
+      &nbsp;&nbsp;<a @click="showPosDetail()">[+]</a><br>
+      <div v-show="bShowPosDetail" class="bg_grey">
+        &nbsp;&nbsp;&nbsp;&nbsp;{{pos1221.upper}}/{{pos1221.lower}}&nbsp;&nbsp;
+        {{pos1221.period}}h<br>
+        <b>[1136]</b> {{pos1136.upper}}/{{pos1136.lower}}&nbsp;&nbsp;
+        {{pos1136.period}}h&nbsp;&nbsp;&nbsp;${{pos1136.value}}<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;估年收 {{annual_1136}}&nbsp;&nbsp;
+        apr {{apr_1136}}% + st {{apr_1136_st}}%
+      </div>
+      [stOs] {{osmo_redeem}} ~ osm {{st_osmo}}&nbsp;&nbsp;<a :href="genLink(833)" target="_blank" class="div_ju">{{st_osmo_div}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;0.3
+      <br>
+      [stAt] {{atom_redeem}} ~ osm {{st_atom}}&nbsp;&nbsp;<a :href="genLink(1136)" target="_blank" class="div_ju">{{st_atom_div}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;0.3
+      <br><br>
 <!--
       == Position ========&nbsp;&nbsp;<input v-model=pos1221.reward style="width:60px"><br>
       <input type="checkbox" v-model=bHavePos>&nbsp;&nbsp;<b>[1221]</b>&nbsp;&nbsp;估年收 {{annual_1221}}&nbsp;&nbsp;apr {{apr_1221}}%
@@ -86,7 +77,21 @@
       &nbsp;&nbsp;&nbsp;&nbsp;當期 {{current_1221}}&nbsp;&nbsp;&nbsp;估年收 {{current_annual}} &nbsp;&nbsp;&nbsp;apr {{apr_current}}%<br>
       &nbsp;&nbsp;&nbsp;&nbsp;NT<a class="div_ju">{{total_annual2}}萬</a>&nbsp;&nbsp;總年收 {{total_annual}} &nbsp;&nbsp;&nbsp;apr {{apr_total}}%
       <br><br>
+      cake calc: <a class="s_red"> {{calcRes}}%</a><br>
+      <input type="radio" id="a" v-model=calc_fee value="0.01"/>
+      <label for="a">0.01%</label>&nbsp;
+      <input type="radio" id="b" v-model=calc_fee value="0.05"/>
+      <label for="b">0.05%</label>&nbsp;
+      <input type="radio" id="c" v-model=calc_fee value="0.2"/>
+      <label for="c">0.2%</label><br>
+      liq: <input v-model=calc_liq style="width:40px"> M&nbsp;&nbsp;
+      7vol: <input v-model=calc_vol style="width:40px"> M&nbsp;&nbsp;
+      7fee: <input v-model=calc_7d_fee style="width:40px">
+      <br>
 -->
+      <br><br><br>
+    </div>
+    <div class="omo_block">
       == Levana ======== atom: {{total_atom}}<br>
       [Atom Fee] apr <a class="s_red">{{atomFee_le}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;
       [LP]&nbsp; {{atom_lp}}
@@ -101,30 +106,18 @@
       [BTC] <a class="s_red">{{btcFee_le}}%</a>&nbsp;&nbsp;&nbsp;
       [ETH] <a class="s_red">{{ethFee_le}}%</a>
       <br><br>
-      <input type="checkbox" v-model=bShowStBuy> Buying St&nbsp;&nbsp;
-      &nbsp;&nbsp;<a @click="showPosDetail()">[+]</a><br>
-      <div v-show="bShowPosDetail" class="bg_grey">
-        &nbsp;&nbsp;&nbsp;&nbsp;{{pos1221.upper}}/{{pos1221.lower}}&nbsp;&nbsp;
-        {{pos1221.period}}h<br>
-        <b>[1136]</b> {{pos1136.upper}}/{{pos1136.lower}}&nbsp;&nbsp;
-        {{pos1136.period}}h&nbsp;&nbsp;&nbsp;${{pos1136.value}}<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;估年收 {{annual_1136}}&nbsp;&nbsp;
-        apr {{apr_1136}}% + st {{apr_1136_st}}%
-      </div>
-      [stOs] {{osmo_redeem}} ~ osm {{st_osmo}}&nbsp;&nbsp;<a :href="genLink(833)" target="_blank" class="div_ju">{{st_osmo_div}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;0.3
+      == Binance ========<br>
+      [BTC Fee] <a class="s_red">{{btcFee}}%</a><br>
+      [ETH Fee] <a class="s_red">{{ethFee}}%</a><br>
+      [ATOM Fee] <a class="s_red">{{atomFee}}%</a><br>
+      [DYX Fee] <a class="s_red">{{dydxFee}}%</a><br><br>
+      [BNB Fee] <a class="s_red">{{bnbFee}}%</a><br>
+      [DOGE Fee] <a class="s_red">{{dogeFee}}%</a><br>
+      [BCH Fee] <a class="s_red">{{bchFee}}%</a><br>
       <br>
-      [stAt] {{atom_redeem}} ~ osm {{st_atom}}&nbsp;&nbsp;<a :href="genLink(1136)" target="_blank" class="div_ju">{{st_atom_div}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;0.3
-      <br><br>
-      cake calc: <a class="s_red"> {{calcRes}}%</a><br>
-      <input type="radio" id="a" v-model=calc_fee value="0.01"/>
-      <label for="a">0.01%</label>&nbsp;
-      <input type="radio" id="b" v-model=calc_fee value="0.05"/>
-      <label for="b">0.05%</label>&nbsp;
-      <input type="radio" id="c" v-model=calc_fee value="0.2"/>
-      <label for="c">0.2%</label><br>
-      liq: <input v-model=calc_liq style="width:40px"> M&nbsp;&nbsp;
-      7vol: <input v-model=calc_vol style="width:40px"> M&nbsp;&nbsp;
-      7fee: <input v-model=calc_7d_fee style="width:40px">
+      <div v-for="fund in fundArr">
+        {{fund.symbol}}: {{fund.rate}}%
+      </div>
       <br><br><br>
     </div>
   </div> 
@@ -134,7 +127,6 @@
 <script>
 import SimpPrice from "@/components/SimpPrice";
 import RightLink from "@/components/RightLink";
-import CurvePools from "@/components/CurvePools";
 import BorrowRate from "@/components/BorrowRate";
   
 const CORS_URL = 'http://localhost:8088/'
@@ -149,7 +141,6 @@ export default {
       
       bShowNotice: true,
       bStNotice: true,
-      bAxlNotice: false,
       bRateNotice: false,
       bUpdateMaxDc: true,
       bShowStBuy: true,
@@ -223,12 +214,6 @@ export default {
       mars_info: 1,
       strd_info: 1,
       
-      wbtc_qt: 0.5,
-      gmx_rev: 0,
-      gmx_period: 1,
-      eth_future_div: 0,
-      btc_future_div: 0,
-      
       calc_fee: 0.01,
       calc_liq: 1,
       calc_vol: 1,
@@ -246,7 +231,6 @@ export default {
   components: {
     SimpPrice,
     RightLink,
-    CurvePools,
     BorrowRate
   },
   mounted: function() {
@@ -264,15 +248,15 @@ export default {
       .catch(this.errRes)
     // fetch levana lp
     this.axios
-      .get(CORS_URL + 'https://indexer-mainnet.levana.finance/collateral-per-token2?market=osmo1hd7r733w49wrqnxx3daz4gy7kvdhgwsjwn28wj7msjfk4tde89aqjqhu8x')
+      .get('https://indexer-mainnet.levana.finance/collateral-per-token2?market=osmo1hd7r733w49wrqnxx3daz4gy7kvdhgwsjwn28wj7msjfk4tde89aqjqhu8x')
       .then(this.resLevana4)
       .catch(this.errRes)
     this.axios
-      .get(CORS_URL + 'https://indexer-mainnet.levana.finance/collateral-per-token2?market=osmo127aqy4697zqn27z0vqr3x2n8lraf27t7udvl6ef5hcwmwhjadegq9vytdj')
+      .get('https://indexer-mainnet.levana.finance/collateral-per-token2?market=osmo127aqy4697zqn27z0vqr3x2n8lraf27t7udvl6ef5hcwmwhjadegq9vytdj')
       .then(this.resLevana5)
       .catch(this.errRes)
     this.axios
-      .get(CORS_URL + 'https://indexer-mainnet.levana.finance/collateral-per-token2?market=osmo1ufpu3nudumzh53sek246zrwvv2cc7leplaqruuggeny7wlcvfrzq4cqmwd')
+      .get('https://indexer-mainnet.levana.finance/collateral-per-token2?market=osmo1ufpu3nudumzh53sek246zrwvv2cc7leplaqruuggeny7wlcvfrzq4cqmwd')
       .then(this.resLevana6)
       .catch(this.errRes)
   },
@@ -321,10 +305,6 @@ export default {
       }
       if(this.bRateNotice && (this.bchFee > 0.009)) {
         this.notice('Watch bch rate!!', 567)
-      }
-      
-      if(this.bAxlNotice) {
-        this.$refs.curve_pools.checkCondition(this.notice)
       }
     },
     fetchBinance() { 
@@ -566,12 +546,10 @@ export default {
       this.fetchOsmoInfo()
       this.fetchMax()
       
-      this.calPeriod()
       this.checkCorsAlive()      
       this.checkCondition()
            
       this.$refs.borrow_rate.fetch()
-      this.$refs.curve_pools.fetch() 
     },
     fetchPrior() {
       this.fetchBinance()
@@ -647,10 +625,6 @@ export default {
         return
       }
     },
-    calPeriod() {
-      let gmxStart = new Date('2023-08-13T01:15')
-      this.gmx_period = Math.round((this.now - gmxStart) / 36000 / 24) / 100
-    },
     showPosDetail() {
       this.bShowPosDetail = !this.bShowPosDetail
     },
@@ -669,29 +643,6 @@ export default {
     },
     fixed_osmo() {
       return this.price.osmo.osm * this.usdc_bn / 10000
-    },
-    gmx_annual() {
-      let stRev = this.price.eth.cex * 2.32 * 0.038
-      let rev = this.gmx_rev / this.gmx_period * 365 + stRev - (this.eth_cost * 0.035)
-      return Math.round(rev / this.eth_cost * 10000) / 100
-    },
-    eth_cost() {
-      let longCost = this.price.eth.cex * 2.32 * 2.5 * 0.6
-      let shortCost = this.price.eth.cex * 2 * 2.5
-      return Math.round(longCost + shortCost)
-    },
-    short_annual() {
-      return Math.round(this.gmx_rev / this.gmx_period * 365 / (this.price.eth.cex * 4.35) * 10000) / 100
-    },
-    eth_future_rev() {
-      let end = new Date('2023-09-30T08:00')
-      let period = (end - this.now) / 3600 / 24 / 1000
-      return Math.round(this.eth_future_div / this.price.eth.cex / period * 365 * 10000) / 100
-    },
-    btc_future_rev() {
-      let end = new Date('2023-09-30T08:00')
-      let period = (end - this.now) / 3600 / 24 / 1000
-      return Math.round(this.btc_future_div / this.price.wbtc.cex / period * 365 * 10000) / 100
     },
     calcRes() {
       let liq = this.calc_liq * 1000000
