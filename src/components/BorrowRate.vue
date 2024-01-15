@@ -9,13 +9,14 @@
   [Eth]&nbsp;&nbsp;<a class="div_ju">{{borrow(usdc.e)}}%</a>&nbsp;&nbsp;<a class="div_cr">{{borrow(usdt.e)}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;eth-<a class="s_red">{{borrow(eth.e)}}%</a><br>
   [E-v2]&nbsp;&nbsp;<a class="div_ju">{{borrow(usdc.e2)}}%</a>&nbsp;&nbsp;<a class="div_cr">{{borrow(usdt.e2)}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;eth-<a class="s_red">{{borrow(eth.e2)}}%</a><br>
 -->
-  [Comp]&nbsp;&nbsp;p-<a class="div_ju">{{compRate.p}}%</a>&nbsp;&nbsp;ar-<a class="div_ju">{{compRate.ar}}%</a>&nbsp;&nbsp;ba-<a class="div_ju">{{compRate.ba}}%</a><br>
+  [Comp]&nbsp;&nbsp;p-<a class="div_ju">{{compBorrow.p}}%</a>&nbsp;&nbsp;ar-<a class="div_ju">{{compBorrow.ar}}%</a>&nbsp;&nbsp;ba-<a class="div_ju">{{compBorrow.ba}}%</a><br>
   <br>
   == Supply Rate ========<br>
   [Arbi]&nbsp;&nbsp;<a class="div_ju">{{supply(usdc.ar)}}%</a>&nbsp;&nbsp;<a class="div_cr">{{supply(usdt.ar)}}%</a><br>
   [Poly]&nbsp;&nbsp;<a class="div_ju">{{supply(usdc.p)}}%</a>&nbsp;&nbsp;<a class="div_cr">{{supply(usdt.p)}}%</a><br>
   [P-v2]&nbsp;&nbsp;<a class="div_ju">{{supply(usdc.p2)}}%</a>&nbsp;&nbsp;<a class="div_cr">{{supply(usdt.p2)}}%</a><br>
   [Opti]&nbsp;&nbsp;<a class="div_ju">{{supply(usdc.op)}}%</a>&nbsp;&nbsp;<a class="div_cr">{{supply(usdt.op)}}%</a><br>
+  [Comp]&nbsp;&nbsp;p-<a class="div_ju">{{compSupply.p}}%</a>&nbsp;&nbsp;ar-<a class="div_ju">{{compSupply.ar}}%</a>&nbsp;&nbsp;ba-<a class="div_ju">{{compSupply.ba}}%</a><br>
   [Venus]&nbsp;&nbsp;<a class="div_ju">{{venusRate.usdc}}%</a>&nbsp;&nbsp;<a class="div_cr">{{venusRate.usdt}}%</a>&nbsp;
 </div>
 </template>
@@ -30,7 +31,8 @@ export default {
       msg: '',
       bShowMore: false,
       aaveData: {},
-      compRate: {},
+      compBorrow: {},
+      compSupply: {},
       venusRate: {},
     }
   },
@@ -86,53 +88,31 @@ export default {
       let objArr = res.data.result
       let tmpObj = objArr.find(a => this.venus_addr.usdc == a.address)
       this.venusRate.usdc = Math.round(tmpObj.supplyApy * 100) / 100
-//      this.venusRate.usdc = Math.round(tmpObj.borrowApy * 100) / 100
     },
     resVenus2(res) {
       let objArr = res.data.result
       let tmpObj = objArr.find(a => this.venus_addr.usdt == a.address)
       this.venusRate.usdt = Math.round(tmpObj.supplyApy * 100) / 100
-//      this.venusRate.usdc = Math.round(tmpObj.borrowApy * 100) / 100
     },
     fetchComp() {
-      // https://v3-api.compound.finance/market/all-networks/all-contracts/summary
       this.axios
         .get('https://v3-api.compound.finance/market/all-networks/all-contracts/summary')
         .then(this.resComp)
         .catch(this.errRes)
-//      this.axios
-//        .get('https://v3-api.compound.finance/market/polygon-mainnet/0xF25212E676D1F7F89Cd72fFEe66158f541246445/historical/summary')
-//        .then(this.resCompPoly)
-//        .catch(this.errRes)
-//      this.axios
-//        .get('https://v3-api.compound.finance/market/arbitrum-mainnet/0x9c4ec768c28520B50860ea7a15bd7213a9fF58bf/historical/summary')
-//        .then(this.resCompAr)
-//        .catch(this.errRes)
-//      this.axios
-//        .get('https://v3-api.compound.finance/market/base-mainnet/0x9c4ec768c28520B50860ea7a15bd7213a9fF58bf/historical/summary')
-//        .then(this.resCompBa)
-//        .catch(this.errRes)
     },
     resComp(res) {
+      this.compData = res.data
+      
       let objArr = res.data
       let tmpObj = objArr.find(a => this.comp_usdc.p == a.comet.address)
-      this.compRate.p = Math.round(tmpObj.borrow_apr * 10000) / 100
+      this.compBorrow.p = Math.round(tmpObj.borrow_apr * 10000) / 100
+      this.compSupply.p = Math.round(tmpObj.supply_apr * 10000) / 100
       tmpObj = objArr.find(a => (42161 == a.chain_id) && (this.comp_usdc.ar == a.comet.address))
-      this.compRate.ar = Math.round(tmpObj.borrow_apr * 10000) / 100
+      this.compBorrow.ar = Math.round(tmpObj.borrow_apr * 10000) / 100
+      this.compSupply.ar = Math.round(tmpObj.supply_apr * 10000) / 100
       tmpObj = objArr.find(a => (8453 == a.chain_id) && (this.comp_usdc.ar == a.comet.address))
-      this.compRate.ba = Math.round(tmpObj.borrow_apr * 10000) / 100
-    },
-    resCompPoly(res) {
-      let idx = res.data.length - 1
-      this.compRate.p = Math.round(res.data[idx].borrow_apr * 10000) / 100
-    },
-    resCompAr(res) {
-      let idx = res.data.length - 1
-      this.compRate.ar = Math.round(res.data[idx].borrow_apr * 10000) / 100
-    },
-    resCompBa(res) {
-      let idx = res.data.length - 1
-      this.compRate.ba = Math.round(res.data[idx].borrow_apr * 10000) / 100
+      this.compBorrow.ba = Math.round(tmpObj.borrow_apr * 10000) / 100
+      this.compSupply.ba = Math.round(tmpObj.supply_apr * 10000) / 100
     },
     checkCondition(noticeFunc) {
     },
