@@ -1,24 +1,27 @@
 <template>
 <div><br>
-<!--    <a href="https://dex.wynddao.com/swap" target="_blank">Wynd-Swap</a><br>-->
-<!--    <a href="https://app.kava.io/lend" target="_blank">Kava-Lend</a><br>-->
+<!--
+    <a href="https://dex.wynddao.com/swap" target="_blank">Wynd-Swap</a><br>
+    <a href="https://app.kava.io/lend" target="_blank">Kava-Lend</a><br>
     <a href="https://app.crescent.network/swap?from=statom&to=atom" target="_blank">Cres</a>&nbsp;
-    <a href="https://app.stride.zone/" target="_blank">Stride</a><br>
-    <hr>
     <a href="https://satellite.money/" target="_blank">Axelar</a>&nbsp;
     <a href="https://www.orbiter.finance/" target="_blank">Orbit</a><br>
     <a href="https://baseswap.fi/bridge" target="_blank">BSwp</a>&nbsp; 
-    <a href="https://app.squidrouter.com/" target="_blank">Squid</a><br> 
-<!--    <a href="https://app.multichain.org/#/router" target="_blank">Multi-chain</a><br>-->
-    <hr>
-    <a href="https://app.uniswap.org/#/swap" target="_blank">Uni</a>&nbsp;
-    <a href="https://app.venus.io/#/core-pool?chainId=56" target="_blank">Venus</a><br>  
+    <a href="https://app.multichain.org/#/router" target="_blank">Multi-chain</a><br>
+    <a href="https://app.uniswap.org/#/swap" target="_blank">Uni</a>&nbsp; 
     <a href="https://pancakeswap.finance/swap" target="_blank">Cake</a>&nbsp; 
     <a href="https://www.sushi.com/swap" target="_blank">Sushi</a><br> 
     <hr>
+-->
+    <a href="https://app.stride.zone/" target="_blank">Stride</a>&nbsp;
+    <a href="https://app.squidrouter.com/" target="_blank">Squid</a><br> 
+    <a href="https://airdrops.one/" target="_blank">AirDrop</a><br>   
+    <hr>
     <a href="https://app.radiant.capital/#/manage-radiant" target="_blank">Rdnt</a>&nbsp;
-<!--    <a href="https://app.venus.io/" target="_blank">Venus</a><br>-->
+    <a href="https://app.venus.io/#/core-pool?chainId=56" target="_blank">Venus</a><br>
+    <a href="https://app.kinza.finance/#/" target="_blank">Kinza</a>&nbsp;
     <a href="https://app.aave.com/markets/" target="_blank">Aave</a><br>
+    <hr>
     <a href="https://app.gmx.io/#/v2" target="_blank">GMX</a>&nbsp;
     <a href="https://app.compound.finance/markets" target="_blank">Comp</a><br>
     <a href="https://trade.levana.finance/osmosis/trade/OSMO_USD" target="_blank">Levana</a>&nbsp;
