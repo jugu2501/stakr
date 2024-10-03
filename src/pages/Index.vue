@@ -18,14 +18,15 @@
     </div>
     <div class="omo_block">
       <SimpPrice ref="wbtc" symbol="WBTC" :priceData="price" :base="'cex'" :compare="'osm'"></SimpPrice>
-      [Q1] {{price.wbtc.cm}} <a class="s_red">{{btc_cm_div}}%</a>&nbsp;&nbsp;
-      [Q2] {{price.wbtc.cm2}} <a class="s_red">{{btc_cm_div2}}%</a><br>
+      [近] {{price.wbtc.cm}} <a class="s_red">{{btc_cm_div}}%</a>&nbsp;&nbsp;
+      [次] {{price.wbtc.cm2}} <a class="s_red">{{btc_cm_div2}}%</a><br>
       <SimpPrice ref="eth" symbol="ETH" :priceData="price" :base="'cex'" :compare="'osm'"></SimpPrice>
-      [Q1] {{price.eth.cm}} <a class="s_red">{{eth_cm_div}}%</a>&nbsp;&nbsp;
-      [Q2] {{price.eth.cm2}} <a class="s_red">{{eth_cm_div2}}%</a><br><br>
+      [近] {{price.eth.cm}} <a class="s_red">{{eth_cm_div}}%</a>&nbsp;&nbsp;
+      [次] {{price.eth.cm2}} <a class="s_red">{{eth_cm_div2}}%</a><br><br>
       <SimpPrice ref="atom" symbol="ATOM" :priceData="price" :base="'cex'" :compare="'osm'"></SimpPrice>
       <SimpPrice ref="osmo" symbol="OSMO" :priceData="price" :base="'cex'" :compare="'osm'"></SimpPrice>
-      [Dydx]&nbsp;{{dydx_bn}} ~ osm {{dydx_info}} <a class="div_ju">{{dydx_div}}%</a><br><br>
+      [Dydx]&nbsp;{{dydx_bn}} ~ osm {{dydx_info}} <a class="div_ju">{{dydx_div}}%</a>&nbsp;&nbsp;0.4<br>
+      [Strd]&nbsp;{{strd_kr}} ~ osm {{strd_info}} <a class="div_ju">{{strd_div}}%</a>&nbsp;&nbsp;0.6<br><br>
       [<a href="https://www.coingecko.com/zh-tw/數字貨幣/radiant-capital" target="_blank">Rdnt</a>]&nbsp; {{rdnt_bn}}&nbsp;&nbsp;&nbsp;&nbsp;
       [Bnb]&nbsp; {{price.bnb.cex}}
       <br>
@@ -33,16 +34,16 @@
       [Bch]&nbsp; {{bch_bn}}
       <br>
       [Arb]&nbsp; {{arb_bn}}&nbsp;&nbsp;&nbsp;&nbsp;
-      [Dydx]&nbsp; {{dydx_bn}}
+      [Op]&nbsp; {{op_bn}}
       <br>
       [Gmx]&nbsp; {{gmx_bn}}&nbsp;&nbsp;&nbsp;&nbsp;
+      [Dydx]&nbsp; {{dydx_bn}}
+      <br>
+      [Aave]&nbsp; {{aave_bn}}&nbsp;&nbsp;&nbsp;&nbsp;
       [Comp]&nbsp; {{comp_bn}}&nbsp;&nbsp;&nbsp;&nbsp;
       <br>
-      [<a href="https://info.osmosis.zone/token/MARS" target="_blank">Mars</a>]&nbsp; {{mars_info}}&nbsp;&nbsp;&nbsp;&nbsp;
-      [<a href="https://info.osmosis.zone/token/STRD" target="_blank">Strd</a>]&nbsp; {{strd_info}}
-      <br>
-      [<a href="https://info.osmosis.zone/token/LIKE" target="_blank">Like</a>]&nbsp; {{like_info}}&nbsp;&nbsp;&nbsp;&nbsp;
-      [Ion]&nbsp; {{ion_info}}
+      [Mars]&nbsp; {{mars_info}}&nbsp;&nbsp;&nbsp;&nbsp;
+      [Like]&nbsp; {{like_info}}
       <br><br>
       <input type="checkbox" v-model=bShowStBuy> Buying St&nbsp;&nbsp;
       &nbsp;&nbsp;<a @click="showPosDetail()">[+]</a><br>
@@ -96,25 +97,20 @@
     </div>
     <div class="omo_block">
       == Levana funding ========<br>
-<!--
-      [Atom] apr <a class="s_red">{{atomFee_le}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;
-      [LP]&nbsp; {{atom_lp}}
-      <br>
-      [Osmo] apr <a class="s_red">{{osmoFee}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;
-      [LP]&nbsp; {{osmo_lp}}
-      <br>
-      [st Fee] apr <a class="s_red">{{stFee}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;
-      [LP]&nbsp; {{st_lp}}
-      <br>
--->
       [Atom] <a class="s_red">{{atomFee_le}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;
-      [st] apr <a class="s_red">{{stFee}}%</a><br>
+      [st] <a class="s_red">{{stFee}}%</a><br>
       [Osmo] <a class="s_red">{{osmoFee}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;
       [st] <a class="s_red">{{stOsmoFee}}%</a><br>
-      [wBTC] <a class="s_red">{{wbtcFee_le}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;
-      [BTC] <a class="s_red">{{btcFee_le}}%</a><br>
-      [ETH] <a class="s_red">{{ethFee_le}}%</a>
-      <br><br>
+      [BTC] <a class="s_red">{{btcFee_le}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;
+      [wBTC] <a class="s_red">{{wbtcFee_le}}%</a><br>
+      [ETH] <a class="s_red">{{ethFee_le}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;
+      [DYX] <a class="s_red">{{dyxFee_le}}%</a><br>
+      [SOL] <a class="s_red">{{solFee_le}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;
+      [DOGE] <a class="s_red">{{dogeFee_le}}%</a><br>
+      [AVAX] <a class="s_red">{{avaxFee_le}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;
+      [LINK] <a class="s_red">{{linkFee_le}}%</a><br>
+<!--      [TIA] <a class="s_red">{{tiaFee_le}}%</a><br>-->
+      <br>
       == Binance funding ========<br>
       [BTC] <a class="s_red">{{btcFee}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;
       [ETH] <a class="s_red">{{ethFee}}%</a><br>
@@ -122,8 +118,14 @@
       [DYX] <a class="s_red">{{dydxFee}}%</a><br>
       [BNB] <a class="s_red">{{bnbFee}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;
       [DOGE] <a class="s_red">{{dogeFee}}%</a><br>
+      [LTC] <a class="s_red">{{ltcFee}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;
       [BCH] <a class="s_red">{{bchFee}}%</a><br>
+      [ARB] <a class="s_red">{{arbFee}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;
+      [AVAX] <a class="s_red">{{avaxFee}}%</a><br>
+      [SOL] <a class="s_red">{{solFee}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;
+      [LINK] <a class="s_red">{{linkFee}}%</a><br>
       <br>
+      {{msg}}
       <div v-for="fund in fundArr">
         {{fund.symbol}}: {{fund.rate}}%
       </div>
@@ -190,11 +192,15 @@ export default {
       busd_bn: 1,
       usdc_bn: 1,
       arb_bn: 1,
+      op_bn: 1,
       dydx_bn: 1,
       rdnt_bn: 1,
       cake_bn: 1,
       gmx_bn: 1,
+      aave_bn: 1,
       comp_bn: 1,
+      
+      strd_kr: 1,
       
       atomFee: 1,
       btcFee: 1,
@@ -202,24 +208,31 @@ export default {
       dydxFee: 1,
       bnbFee: 1,
       bchFee: 1,
+      arbFee: 1,
+      avaxFee: 1,
       dogeFee: 1,
+      ltcFee: 1,
+      solFee: 1,
+      linkFee: 1,
       
       atomFee_le: 1,
       btcFee_le: 1,
       wbtcFee_le: 1,
       ethFee_le: 1,
+      tiaFee_le: 1,
+      dyxFee_le: 1,
+      solFee_le: 1,
+      linkFee_le: 1,
+      avaxFee_le: 1,
+      dogeFee_le: 1,
       osmoFee: 1,
       stFee: 1,
       stOsmoFee: 1,
-      atom_lp: 1,
-      osmo_lp: 1,
-      st_lp: 1,
       
       usdc_mx: 1,
       usdt_mx: 1,
       dcdt_mx: 1,
       
-      ion_info: 1, 
       like_info: 1,
       mars_info: 1,
       strd_info: 1,
@@ -230,7 +243,7 @@ export default {
       calc_vol: 1,
       calc_7d_fee: 1,
       
-      st_atom: 1,  // 803
+      st_atom: 1,  // 1136
       st_osmo: 1,  // 833
       st_dydx: 1,  // 1423
       
@@ -250,27 +263,18 @@ export default {
     if(!process.isClient){
       return
     }
-    this.fetchStart()
+    this.fetchMain()
+    this.fetchLess()
     this.fetchStride()
-    this.interval = setInterval(this.fetchStart, 60000)
+    this.interval = setInterval(this.fetchMain, 60000)
+    this.interval = setInterval(this.fetchLess, 300000)
+    
+    this.fetchTest()
     
     // fetch pos 1136
 //    this.axios
 //      .get('https://api-osmosis-chain.imperator.co/cl/v1/position/create/osmo1m33zxjmdudyusrwx8yry5kkunhc780947g8akg')
 //      .then(this.resPos2)
-//      .catch(this.errRes)
-//    // fetch levana lp
-//    this.axios
-//      .get('https://indexer-mainnet.levana.finance/collateral-per-token2?market=osmo1hd7r733w49wrqnxx3daz4gy7kvdhgwsjwn28wj7msjfk4tde89aqjqhu8x')
-//      .then(this.resLevana4)
-//      .catch(this.errRes)
-//    this.axios
-//      .get('https://indexer-mainnet.levana.finance/collateral-per-token2?market=osmo127aqy4697zqn27z0vqr3x2n8lraf27t7udvl6ef5hcwmwhjadegq9vytdj')
-//      .then(this.resLevana5)
-//      .catch(this.errRes)
-//    this.axios
-//      .get('https://indexer-mainnet.levana.finance/collateral-per-token2?market=osmo1ufpu3nudumzh53sek246zrwvv2cc7leplaqruuggeny7wlcvfrzq4cqmwd')
-//      .then(this.resLevana6)
 //      .catch(this.errRes)
   },
   watch:{
@@ -352,7 +356,9 @@ export default {
       this.usdc_bn = 
         Math.round(res.data.find(a=> a.symbol == 'USDCUSDT').price * 10000)
       this.arb_bn =
-        Math.round(res.data.find(a=> a.symbol == 'ARBUSDT').price * 10000) / 10000
+        Math.round(res.data.find(a=> a.symbol == 'ARBUSDT').price * 1000) / 1000
+      this.op_bn =
+        Math.round(res.data.find(a=> a.symbol == 'OPUSDT').price * 1000) / 1000
       this.dydx_bn =
         Math.round(res.data.find(a=> a.symbol == 'DYDXUSDT').price * 10000) / 10000
       this.rdnt_bn =
@@ -361,22 +367,29 @@ export default {
         Math.round(res.data.find(a=> a.symbol == 'CAKEUSDT').price * 1000) / 1000
       this.gmx_bn =
         Math.round(res.data.find(a=> a.symbol == 'GMXUSDT').price * 1000) / 1000
+      this.aave_bn =
+        Math.round(res.data.find(a=> a.symbol == 'AAVEUSDT').price * 100) / 100
       this.comp_bn =
         Math.round(res.data.find(a=> a.symbol == 'COMPUSDT').price * 1000) / 1000  
     },
     resAtomFee(res) {
       let btcObj = res.data.find(a => 'BTCUSDT' == a.symbol)
-      let btcObj2 = res.data.find(a => 'BTCUSDT_240329' == a.symbol)
-      let btcObj3 = res.data.find(a => 'BTCUSDT_240628' == a.symbol)
+      let btcObj2 = res.data.find(a => 'BTCUSDT_241227' == a.symbol)
+      let btcObj3 = res.data.find(a => 'BTCUSDT_250328' == a.symbol)
       let atomObj = res.data.find(a => 'ATOMUSDT' == a.symbol)
       let ethObj = res.data.find(a => 'ETHUSDT' == a.symbol)
-      let ethObj2 = res.data.find(a => 'ETHUSDT_240329' == a.symbol)
-      let ethObj3 = res.data.find(a => 'ETHUSDT_240628' == a.symbol)
+      let ethObj2 = res.data.find(a => 'ETHUSDT_241227' == a.symbol)
+      let ethObj3 = res.data.find(a => 'ETHUSDT_250328' == a.symbol)
       let dydxObj = res.data.find(a => 'DYDXUSDT' == a.symbol)
       let gmxObj = res.data.find(a => 'GMXUSDT' == a.symbol)
       let bnbObj = res.data.find(a => 'BNBUSDT' == a.symbol)
       let bchObj = res.data.find(a => 'BCHUSDT' == a.symbol)
+      let arbObj = res.data.find(a => 'ARBUSDT' == a.symbol)
+      let avaxObj = res.data.find(a => 'AVAXUSDT' == a.symbol)
       let dogeObj = res.data.find(a => 'DOGEUSDT' == a.symbol)
+      let ltcObj = res.data.find(a => 'LTCUSDT' == a.symbol)
+      let solObj = res.data.find(a => 'SOLUSDT' == a.symbol)
+      let linkObj = res.data.find(a => 'LINKUSDT' == a.symbol)
       this.btcFee = Math.round(btcObj.lastFundingRate * 10000000000) / 100000000
       this.price.wbtc.ft = Math.round(btcObj.markPrice * 10) / 10
       this.price.wbtc.cm = Math.round(btcObj2.markPrice * 10) / 10
@@ -389,7 +402,12 @@ export default {
       this.dydxFee = Math.round(dydxObj.lastFundingRate * 10000000000) / 100000000
       this.bnbFee = Math.round(bnbObj.lastFundingRate * 10000000000) / 100000000
       this.bchFee = Math.round(bchObj.lastFundingRate * 10000000000) / 100000000
+      this.arbFee = Math.round(arbObj.lastFundingRate * 10000000000) / 100000000
+      this.avaxFee = Math.round(avaxObj.lastFundingRate * 10000000000) / 100000000      
       this.dogeFee = Math.round(dogeObj.lastFundingRate * 10000000000) / 100000000
+      this.ltcFee = Math.round(ltcObj.lastFundingRate * 10000000000) / 100000000    
+      this.solFee = Math.round(solObj.lastFundingRate * 10000000000) / 100000000
+      this.linkFee = Math.round(linkObj.lastFundingRate * 10000000000) / 100000000
       this.fundArr = res.data.map(a =>{
         return {
           symbol: String(a.symbol).slice(0, -4),
@@ -397,6 +415,16 @@ export default {
         }
       })
       this.fundArr = this.fundArr.filter(a => a.rate > 0.01)
+    },
+    fetchKraken() { 
+      this.axios
+        .get('https://api.kraken.com/0/public/Ticker')
+        .then(this.resKraken)
+        .catch(this.errRes)
+    },
+    resKraken(res) { 
+      this.strd_kr =
+        Math.round(res.data.result.STRDUSD.c[0] * 1000) / 1000
     },
     fetchLevana() {
       let month = this.now.getUTCMonth() * 1 + 1
@@ -431,18 +459,24 @@ export default {
         
         tmpObj = markets.find(a => a.status.base == 'axlETH')
         this.ethFee_le = Math.round(tmpObj.status.short_funding * 1000) / 10
-    },
-    resLevana4(res) {
-      let data = res.data
-      this.atom_lp = Math.round(data[data.length - 1].collateral_per_token * 1000) / 1000
-    },
-    resLevana5(res) {
-      let data = res.data
-      this.osmo_lp = Math.round(data[data.length - 1].collateral_per_token * 1000) / 1000
-    },
-    resLevana6(res) {
-      let data = res.data
-      this.st_lp = Math.round(data[data.length - 1].collateral_per_token * 1000) / 1000
+        
+        tmpObj = markets.find(a => a.status.base == 'TIA')
+        this.tiaFee_le = Math.round(tmpObj.status.short_funding * 1000) / 10
+        
+        tmpObj = markets.find(a => a.status.base == 'DYDX')
+        this.dyxFee_le = Math.round(tmpObj.status.short_funding * 1000) / 10   
+        
+        tmpObj = markets.find(a => a.status.base == 'SOL')
+        this.solFee_le = Math.round(tmpObj.status.short_funding * 1000) / 10   
+        
+        tmpObj = markets.find(a => a.status.base == 'DOGE')
+        this.dogeFee_le = Math.round(tmpObj.status.short_funding * 1000) / 10   
+        
+        tmpObj = markets.find(a => a.status.base == 'AVAX')
+        this.avaxFee_le = Math.round(tmpObj.status.short_funding * 1000) / 10   
+        
+        tmpObj = markets.find(a => a.status.base == 'LINK')
+        this.linkFee_le = Math.round(tmpObj.status.short_funding * 1000) / 10      
     },
     fetchOsmoInfo() {
       this.axios
@@ -453,8 +487,6 @@ export default {
     resOsmoInfo(res) { 
       this.like_info =
         Math.round(res.data.find(a=> a.symbol == 'LIKE').price * 1000000) / 1000000
-      this.ion_info =
-        Math.round(res.data.find(a=> a.symbol == 'ION').price * 100) / 100
       this.mars_info =
         Math.round(res.data.find(a=> a.symbol == 'MARS').price * 10000) / 10000
       this.strd_info =
@@ -462,9 +494,19 @@ export default {
       this.dydx_info =
         Math.round(res.data.find(a=> a.symbol == 'DYDX').price * 1000) / 1000
     },
+    fetchTest() {
+      this.axios
+        .get(CORS_URL + 'https://api.seer.coinhall.org/api/coinhall/hallswap/assets/v2?fromChainId=osmosis-1')
+        .then(this.resTest)
+        .catch(this.errRes)
+    },
+    resTest(res) {
+      this.msg = res.data
+    },
     fetchStride() {
       this.axios
-        .get(CORS_URL + 'https://stride-api.polkachu.com/Stride-Labs/stride/stakeibc/host_zone')
+        .get('https://stride-api.polkachu.com/Stride-Labs/stride/stakeibc/host_zone')
+//        .get(CORS_URL + 'https://stride-api.polkachu.com/Stride-Labs/stride/stakeibc/host_zone')
         .then(this.resStride)
         .catch(this.errRes)
     },
@@ -555,7 +597,7 @@ export default {
         this.pos1136.atomAmt = atomObj.amount / 1000000
       }
     },
-    fetchStart() {
+    fetchMain() {
       this.now = new Date()
       
       this.fetchPrior()
@@ -567,22 +609,25 @@ export default {
       this.fetchOsmoInfo()
       this.fetchMax()
       
-      this.checkCorsAlive()      
+//      this.checkCorsAlive()      
       this.checkCondition()
            
       this.$refs.borrow_rate.fetch()
     },
+    fetchLess() {
+      this.fetchPool(833, this.res833)
+      this.fetchPool(1136, this.res1136)
+      this.fetchPool(1423, this.res1423)
+    },
     fetchPrior() {
       this.fetchBinance()
+      this.fetchKraken()
       this.fetchPool(1221, this.res1221)
     },
     fetchOsmoAll() {    
-      this.fetchPool(833, this.res833)
-      this.fetchPool(1090, this.res1090)
+      this.fetchPool(1090, this.res1090)  // axl-btc
       this.fetchPool(1134, this.res1134)
       this.fetchPool(1135, this.res1135)
-      this.fetchPool(1136, this.res1136)
-      this.fetchPool(1423, this.res1423)
     },
     fetchPool(poolID, funcRes) {
       this.axios
@@ -603,6 +648,8 @@ export default {
     res1090(res) {
       let sqrt = res.data.pool.current_sqrt_price * 0.1
       this.price.wbtc.osm = Math.round(this.fixed_osmo / sqrt / sqrt * 10) / 10
+      
+      this.fetchPool(1422, this.res1422)  // dual btc
     },
     res1221(res) {
       let sqrt = res.data.pool.current_sqrt_price
@@ -621,6 +668,10 @@ export default {
     res1136(res) {
       let sqrt = res.data.pool.current_sqrt_price
       this.st_atom = Math.round(sqrt * sqrt * 10000) / 10000
+    },
+    res1422(res) {
+      let sqrt = res.data.pool.current_sqrt_price
+      this.price.wbtc.osm = Math.round(this.price.wbtc.osm * sqrt * sqrt * 10) / 10
     },
     res1423(res) {
       let sqrt = res.data.pool.current_sqrt_price
@@ -659,6 +710,9 @@ export default {
     dydx_div() {
       return this.calDiv(this.dydx_info, this.dydx_bn, 0.004)
     },
+    strd_div() {
+      return this.calDiv(this.strd_info, this.strd_kr, 0.006)
+    },
     st_atom_div() {
       let fee = (this.bShowStBuy) ? 0.003 : -0.003
       return this.calDiv(this.st_atom, this.atom_redeem, fee)
@@ -675,7 +729,8 @@ export default {
       return Math.round(this.usdc_mx * 0.999 / this.usdt_mx * 0.999 * 10000)
     },
     fixed_osmo() {
-      return this.price.osmo.osm * this.usdc_bn / 10000
+      return this.price.osmo.osm
+//      return this.price.osmo.osm * this.usdc_bn / 10000
     },
     calcRes() {
       let liq = this.calc_liq * 1000000
@@ -724,11 +779,11 @@ export default {
       return Math.round(this.total_annual / (this.pos1221.value + this.pos1136.value) * 100 * 10) / 10
     },
     cm_period() {
-      let end = new Date('2024-03-29T08:00')
+      let end = new Date('2024-12-27T16:00')
       return (end - this.now) / 3600 / 24 / 1000  // days
     },
     cm_period2() {
-      let end = new Date('2024-06-28T08:00')
+      let end = new Date('2025-03-28T16:00')
       return (end - this.now) / 3600 / 24 / 1000  // days
     },
     btc_cm_div() {

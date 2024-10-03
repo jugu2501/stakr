@@ -15,7 +15,11 @@
 -->
     <a href="https://app.stride.zone/" target="_blank">Stride</a>&nbsp;
     <a href="https://app.squidrouter.com/" target="_blank">Squid</a><br> 
-    <a href="https://airdrops.one/" target="_blank">AirDrop</a><br>   
+<!--    <a href="https://dexscreener.com/search?q=axlusdc" target="_blank">AxlPools</a><br>  -->
+    <a href="https://defillama.com/airdrops" target="_blank">AirDrop</a>&nbsp;
+    <a href="https://blockcast.it/tag/空投/" target="_blank">news</a><br>
+    <a href="https://www.app.rage.trade/trade/BTC-USD" target="_blank">Rage</a>&nbsp;
+    <a href="https://go.skip.build/" target="_blank">Skip</a><br>   
     <hr>
     <a href="https://app.radiant.capital/#/manage-radiant" target="_blank">Rdnt</a>&nbsp;
     <a href="https://app.venus.io/#/core-pool?chainId=56" target="_blank">Venus</a><br>
@@ -25,7 +29,7 @@
     <a href="https://app.gmx.io/#/v2" target="_blank">GMX</a>&nbsp;
     <a href="https://app.compound.finance/markets" target="_blank">Comp</a><br>
     <a href="https://trade.levana.finance/osmosis/trade/OSMO_USD" target="_blank">Levana</a>&nbsp;
-    <a href="https://dydx.trade/#/markets" target="_blank">Dydx</a><br>
+    <a href="https://dydx.trade/trade/BTC-USD" target="_blank">Dydx</a><br>
     <hr>
 <!--
     <a href="https://ycharts.com/indicators/3_month_t_bill" target="_blank">T-bill chart</a><br>

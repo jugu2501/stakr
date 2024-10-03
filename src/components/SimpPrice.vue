@@ -23,7 +23,7 @@ export default {
         atom: {osm: 0.002, ju: 0.0112, kv: 0.011, cr: 0.0052, cex: 0.001},
         osmo: {osm: 0.002, ju: 0.012, kv: 0.0145, cex: 0.001},
         juno: {osm: 0.003, ju: 0.0065, cex: 0.002},
-        wbtc: {osm: 0.002, kv: 0.0095, pan: 0.003, cex: 0.001},
+        wbtc: {osm: 0.003, kv: 0.0095, pan: 0.003, cex: 0.001},
         eth: {osm: 0.002, cex: 0.001},
         bnb: {osm: 0.0052, cex: 0.001},
         matic: {osm: 0.0048, cex: 0.001},

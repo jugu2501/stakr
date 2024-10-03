@@ -3,23 +3,23 @@
   == Borrow Rate ========<br>
   [Arbi]&nbsp;&nbsp;<a class="div_ju">{{borrow(usdc.ar)}}%</a>&nbsp;&nbsp;<a class="div_cr">{{borrow(usdt.ar)}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;eth-<a class="s_red">{{borrow(eth.ar)}}%</a><br>
   [Poly]&nbsp;&nbsp;<a class="div_ju">{{borrow(usdc.p)}}%</a>&nbsp;&nbsp;<a class="div_cr">{{borrow(usdt.p)}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;eth-<a class="s_red">{{borrow(eth.p)}}%</a><br>
-  [P-v2]&nbsp;&nbsp;<a class="div_ju">{{borrow(usdc.p2)}}%</a>&nbsp;&nbsp;<a class="div_cr">{{borrow(usdt.p2)}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;eth-<a class="s_red">{{borrow(eth.p2)}}%</a><br>
+<!--  [P-v2]&nbsp;&nbsp;<a class="div_ju">{{borrow(usdc.p2)}}%</a>&nbsp;&nbsp;<a class="div_cr">{{borrow(usdt.p2)}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;eth-<a class="s_red">{{borrow(eth.p2)}}%</a><br>-->
   [Opti]&nbsp;&nbsp;<a class="div_ju">{{borrow(usdc.op)}}%</a>&nbsp;&nbsp;<a class="div_cr">{{borrow(usdt.op)}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;eth-<a class="s_red">{{borrow(eth.op)}}%</a><br>
   [Bsc]&nbsp;&nbsp;<a class="div_ju">{{borrow(usdc.bsc)}}%</a>&nbsp;&nbsp;<a class="div_cr">{{borrow(usdt.bsc)}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;eth-<a class="s_red">{{borrow(eth.bsc)}}%</a><br>
 <!--
   [Eth]&nbsp;&nbsp;<a class="div_ju">{{borrow(usdc.e)}}%</a>&nbsp;&nbsp;<a class="div_cr">{{borrow(usdt.e)}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;eth-<a class="s_red">{{borrow(eth.e)}}%</a><br>
   [E-v2]&nbsp;&nbsp;<a class="div_ju">{{borrow(usdc.e2)}}%</a>&nbsp;&nbsp;<a class="div_cr">{{borrow(usdt.e2)}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;eth-<a class="s_red">{{borrow(eth.e2)}}%</a><br>
 -->
-  [Comp]&nbsp;&nbsp;p-<a class="div_ju">{{compBorrow.p}}%</a>&nbsp;&nbsp;ar-<a class="div_ju">{{compBorrow.ar}}%</a>&nbsp;&nbsp;ba-<a class="div_ju">{{compBorrow.ba}}%</a><br>
+  [Cp]&nbsp;p-<a class="div_ju">{{compBorrow.p}}%</a>&nbsp;ar-<a class="div_ju">{{compBorrow.ar}}%</a>&nbsp;op-<a class="div_ju">{{compBorrow.op}}%</a>&nbsp;ba-<a class="div_ju">{{compBorrow.ba}}%</a><br>
   [Venus]&nbsp;&nbsp;<a class="div_ju">{{venusBorrow.usdc}}%</a>&nbsp;&nbsp;<a class="div_cr">{{venusBorrow.usdt}}%</a>&nbsp;&nbsp;<a class="s_red">{{venusBorrow.eth}}%</a>&nbsp;
-  <br>
+  <br><br>
   == Supply Rate ========<br>
   [Arbi]&nbsp;&nbsp;<a class="div_ju">{{supply(usdc.ar)}}%</a>&nbsp;&nbsp;<a class="div_cr">{{supply(usdt.ar)}}%</a><br>
   [Poly]&nbsp;&nbsp;<a class="div_ju">n{{supply(usdc.pn)}}%</a>&nbsp;&nbsp;<a class="div_ju">{{supply(usdc.p)}}%</a>&nbsp;&nbsp;<a class="div_cr">{{supply(usdt.p)}}%</a><br>
-  [P-v2]&nbsp;&nbsp;<a class="div_ju">{{supply(usdc.p2)}}%</a>&nbsp;&nbsp;<a class="div_cr">{{supply(usdt.p2)}}%</a><br>
+<!--  [P-v2]&nbsp;&nbsp;<a class="div_ju">{{supply(usdc.p2)}}%</a>&nbsp;&nbsp;<a class="div_cr">{{supply(usdt.p2)}}%</a><br>-->
   [Opti]&nbsp;&nbsp;<a class="div_ju">{{supply(usdc.op)}}%</a>&nbsp;&nbsp;<a class="div_cr">{{supply(usdt.op)}}%</a><br>
   [Bsc]&nbsp;&nbsp;<a class="div_ju">{{supply(usdc.bsc)}}%</a>&nbsp;&nbsp;<a class="div_cr">{{supply(usdt.bsc)}}%</a><br>
-  [Comp]&nbsp;&nbsp;p-<a class="div_ju">{{compSupply.p}}%</a>&nbsp;&nbsp;ar-<a class="div_ju">{{compSupply.ar}}%</a>&nbsp;&nbsp;ba-<a class="div_ju">{{compSupply.ba}}%</a><br>
+  [Cp]&nbsp;p-<a class="div_ju">{{compSupply.p}}%</a>&nbsp;ar-<a class="div_ju">{{compSupply.ar}}%</a>&nbsp;op-<a class="div_ju">{{compSupply.op}}%</a>&nbsp;ba-<a class="div_ju">{{compSupply.ba}}%</a><br>
   [Venus]&nbsp;&nbsp;<a class="div_ju">{{venusSupply.usdc}}%</a>&nbsp;&nbsp;<a class="div_cr">{{venusSupply.usdt}}%</a>&nbsp;&nbsp;<a class="s_red">{{venusSupply.eth}}%</a>&nbsp;
 </div>
 </template>
@@ -121,14 +121,17 @@ export default {
       
       let objArr = res.data
       let tmpObj = objArr.find(a => this.comp_usdc.p == a.comet.address)
-      this.compBorrow.p = Math.round(tmpObj.borrow_apr * 10000) / 100
-      this.compSupply.p = Math.round(tmpObj.supply_apr * 10000) / 100
+      this.compBorrow.p = Math.round(tmpObj.borrow_apr * 1000) / 10
+      this.compSupply.p = Math.round(tmpObj.supply_apr * 1000) / 10
+      tmpObj = objArr.find(a => this.comp_usdc.op == a.comet.address)
+      this.compBorrow.op = Math.round(tmpObj.borrow_apr * 1000) / 10
+      this.compSupply.op = Math.round(tmpObj.supply_apr * 1000) / 10
       tmpObj = objArr.find(a => (42161 == a.chain_id) && (this.comp_usdc.ar == a.comet.address))
-      this.compBorrow.ar = Math.round(tmpObj.borrow_apr * 10000) / 100
-      this.compSupply.ar = Math.round(tmpObj.supply_apr * 10000) / 100
+      this.compBorrow.ar = Math.round(tmpObj.borrow_apr * 1000) / 10
+      this.compSupply.ar = Math.round(tmpObj.supply_apr * 1000) / 10
       tmpObj = objArr.find(a => (8453 == a.chain_id) && (this.comp_usdc.ar == a.comet.address))
-      this.compBorrow.ba = Math.round(tmpObj.borrow_apr * 10000) / 100
-      this.compSupply.ba = Math.round(tmpObj.supply_apr * 10000) / 100
+      this.compBorrow.ba = Math.round(tmpObj.borrow_apr * 1000) / 10
+      this.compSupply.ba = Math.round(tmpObj.supply_apr * 1000) / 10
     },
     checkCondition(noticeFunc) {
     },
@@ -148,6 +151,7 @@ export default {
       return {
         p: "0xF25212E676D1F7F89Cd72fFEe66158f541246445",
         ar: "0x9c4ec768c28520B50860ea7a15bd7213a9fF58bf",
+        op: "0x2e44e174f7D53F0212823acC11C01A11d58c5bCB",
       }
     },
     usdc() {
