@@ -1,24 +1,22 @@
 <template>
 <div>
   == Borrow Rate ========<br>
+<!--
   [Arbi]&nbsp;&nbsp;<a class="div_ju">{{borrow(usdc.ar)}}%</a>&nbsp;&nbsp;<a class="div_cr">{{borrow(usdt.ar)}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;eth-<a class="s_red">{{borrow(eth.ar)}}%</a><br>
   [Poly]&nbsp;&nbsp;<a class="div_ju">{{borrow(usdc.p)}}%</a>&nbsp;&nbsp;<a class="div_cr">{{borrow(usdt.p)}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;eth-<a class="s_red">{{borrow(eth.p)}}%</a><br>
-<!--  [P-v2]&nbsp;&nbsp;<a class="div_ju">{{borrow(usdc.p2)}}%</a>&nbsp;&nbsp;<a class="div_cr">{{borrow(usdt.p2)}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;eth-<a class="s_red">{{borrow(eth.p2)}}%</a><br>-->
   [Opti]&nbsp;&nbsp;<a class="div_ju">{{borrow(usdc.op)}}%</a>&nbsp;&nbsp;<a class="div_cr">{{borrow(usdt.op)}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;eth-<a class="s_red">{{borrow(eth.op)}}%</a><br>
   [Bsc]&nbsp;&nbsp;<a class="div_ju">{{borrow(usdc.bsc)}}%</a>&nbsp;&nbsp;<a class="div_cr">{{borrow(usdt.bsc)}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;eth-<a class="s_red">{{borrow(eth.bsc)}}%</a><br>
-<!--
-  [Eth]&nbsp;&nbsp;<a class="div_ju">{{borrow(usdc.e)}}%</a>&nbsp;&nbsp;<a class="div_cr">{{borrow(usdt.e)}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;eth-<a class="s_red">{{borrow(eth.e)}}%</a><br>
-  [E-v2]&nbsp;&nbsp;<a class="div_ju">{{borrow(usdc.e2)}}%</a>&nbsp;&nbsp;<a class="div_cr">{{borrow(usdt.e2)}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;eth-<a class="s_red">{{borrow(eth.e2)}}%</a><br>
 -->
   [Cp]&nbsp;p-<a class="div_ju">{{compBorrow.p}}%</a>&nbsp;ar-<a class="div_ju">{{compBorrow.ar}}%</a>&nbsp;op-<a class="div_ju">{{compBorrow.op}}%</a>&nbsp;ba-<a class="div_ju">{{compBorrow.ba}}%</a><br>
   [Venus]&nbsp;&nbsp;<a class="div_ju">{{venusBorrow.usdc}}%</a>&nbsp;&nbsp;<a class="div_cr">{{venusBorrow.usdt}}%</a>&nbsp;&nbsp;<a class="s_red">{{venusBorrow.eth}}%</a>&nbsp;
   <br><br>
   == Supply Rate ========<br>
+<!--
   [Arbi]&nbsp;&nbsp;<a class="div_ju">{{supply(usdc.ar)}}%</a>&nbsp;&nbsp;<a class="div_cr">{{supply(usdt.ar)}}%</a><br>
   [Poly]&nbsp;&nbsp;<a class="div_ju">n{{supply(usdc.pn)}}%</a>&nbsp;&nbsp;<a class="div_ju">{{supply(usdc.p)}}%</a>&nbsp;&nbsp;<a class="div_cr">{{supply(usdt.p)}}%</a><br>
-<!--  [P-v2]&nbsp;&nbsp;<a class="div_ju">{{supply(usdc.p2)}}%</a>&nbsp;&nbsp;<a class="div_cr">{{supply(usdt.p2)}}%</a><br>-->
   [Opti]&nbsp;&nbsp;<a class="div_ju">{{supply(usdc.op)}}%</a>&nbsp;&nbsp;<a class="div_cr">{{supply(usdt.op)}}%</a><br>
   [Bsc]&nbsp;&nbsp;<a class="div_ju">{{supply(usdc.bsc)}}%</a>&nbsp;&nbsp;<a class="div_cr">{{supply(usdt.bsc)}}%</a><br>
+-->
   [Cp]&nbsp;p-<a class="div_ju">{{compSupply.p}}%</a>&nbsp;ar-<a class="div_ju">{{compSupply.ar}}%</a>&nbsp;op-<a class="div_ju">{{compSupply.op}}%</a>&nbsp;ba-<a class="div_ju">{{compSupply.ba}}%</a><br>
   [Venus]&nbsp;&nbsp;<a class="div_ju">{{venusSupply.usdc}}%</a>&nbsp;&nbsp;<a class="div_cr">{{venusSupply.usdt}}%</a>&nbsp;&nbsp;<a class="s_red">{{venusSupply.eth}}%</a>&nbsp;
 </div>
@@ -51,7 +49,7 @@ export default {
       this.bShowMore = !this.bShowMore
     },
     fetch() {
-      this.fetchAave()
+//      this.fetchAave()
       this.fetchComp()
       this.fetchVenus()
     },
