@@ -10,16 +10,16 @@
       [Usdc]&nbsp; {{usdc_bn}}&nbsp;&nbsp;
       [Wbtc]&nbsp; {{wbtc_bn}}<br>
       [Doge]&nbsp; {{doge_bn}}&nbsp;&nbsp;
-      [Like]&nbsp; {{like_info}}<br>
-      [Mars]&nbsp; {{mars_info}}&nbsp;&nbsp;
+      [Paxg]&nbsp; {{paxg_bn}}<br>
+      [Like]&nbsp; {{like_info}}&nbsp;&nbsp;
       [Strd]&nbsp; {{strd_info}}<br>
       <br><br>
       <BorrowRate ref="borrow_rate"/>
       <br><br><br>
     </div>
     <div class="omo_block">
-      [Mstr] {{rayd_mstr}}&nbsp;&nbsp;{{mstr_div}}%&nbsp;&nbsp;
-      <a href="https://bitcointreasuries.net/public-companies/microstrategy" target="_blank">data</a>&nbsp;&nbsp;
+      [Mstr] {{rayd_mstr}}&nbsp;&nbsp;{{mstr_div_b}}%&nbsp;/&nbsp;{{mstr_div}}%&nbsp;<br>
+      &nbsp;&nbsp;<a href="https://bitcointreasuries.net/public-companies/microstrategy" target="_blank">data</a>&nbsp;&nbsp;
       <a href="https://raydium.io/swap/?inputMint=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&outputMint=XsP7xzNPvEHS1m6qfanPUGjNmdnmsLKEoNAnHjdxxyZ" target="_blank">Rayd</a>&nbsp;&nbsp;
       <a href="https://jup.ag/swap?sell=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&buy=XsP7xzNPvEHS1m6qfanPUGjNmdnmsLKEoNAnHjdxxyZ" target="_blank">Jup</a>
       <br><br>
@@ -109,6 +109,7 @@ export default {
       sqsData: {},
       
       doge_bn: 1,
+      paxg_bn: 1,
       bch_bn: 1,
       wbtc_bn: 1,
       busd_bn: 1,
@@ -143,7 +144,6 @@ export default {
       osmoFee: 1,
       
       like_info: 1,
-      mars_info: 1,
       strd_info: 1,
       
       calc_fee: 0.01,
@@ -233,6 +233,8 @@ export default {
         Math.round(res.data.find(a=> a.symbol == 'ETHUSDT').price * 10) / 10
       this.price.dydx.cex =
         Math.round(res.data.find(a=> a.symbol == 'DYDXUSDT').price * 10000) / 10000
+      this.paxg_bn =
+        Math.round(res.data.find(a=> a.symbol == 'PAXGUSDT').price * 100) / 100    
       this.doge_bn =
         Math.round(res.data.find(a=> a.symbol == 'DOGEUSDT').price * 100000)
       this.bch_bn =
@@ -260,12 +262,12 @@ export default {
     },
     resAtomFee(res) {
       let btcObj = res.data.find(a => 'BTCUSDT' == a.symbol)
-      let btcObj2 = res.data.find(a => 'BTCUSDT_251226' == a.symbol)
-      let btcObj3 = res.data.find(a => 'BTCUSDT_260327' == a.symbol)
+      let btcObj2 = res.data.find(a => 'BTCUSDT_260327' == a.symbol)
+      let btcObj3 = res.data.find(a => 'BTCUSDT_260626' == a.symbol)
       let atomObj = res.data.find(a => 'ATOMUSDT' == a.symbol)
       let ethObj = res.data.find(a => 'ETHUSDT' == a.symbol)
-      let ethObj2 = res.data.find(a => 'ETHUSDT_251226' == a.symbol)
-      let ethObj3 = res.data.find(a => 'ETHUSDT_260327' == a.symbol)
+      let ethObj2 = res.data.find(a => 'ETHUSDT_260327' == a.symbol)
+      let ethObj3 = res.data.find(a => 'ETHUSDT_260626' == a.symbol)
       let dydxObj = res.data.find(a => 'DYDXUSDT' == a.symbol)
       let gmxObj = res.data.find(a => 'GMXUSDT' == a.symbol)
       let bnbObj = res.data.find(a => 'BNBUSDT' == a.symbol)
@@ -422,7 +424,6 @@ export default {
       this.price.eth.osm = Math.round(res.data['ibc/EA1D43981D5C9A1C4AAEA9C23BB1D4FA126BA9BC7020A25E0AE4AA841EA25DC5']['ibc/498A0751C798A0D9A389AA3691123DADA57DAA4FE165D5C75894505B876BA6E4'] * 10) / 10
       this.strd_info = Math.round(res.data['ibc/A8CA5EE328FA10C9519DF6057DA1F69682D28F7D0F5CCC7ECB72E3DCA2D157A4']['ibc/498A0751C798A0D9A389AA3691123DADA57DAA4FE165D5C75894505B876BA6E4'] * 10000) / 10000
       this.like_info = Math.round(res.data['ibc/9989AD6CCA39D1131523DB0617B50F6442081162294B4795E26746292467B525']['ibc/498A0751C798A0D9A389AA3691123DADA57DAA4FE165D5C75894505B876BA6E4'] * 1000000)
-      this.mars_info = Math.round(res.data['ibc/B67DF59507B3755EEDE0866C449445BD54B4DA82CCEBA89D775E53DC35664255']['ibc/498A0751C798A0D9A389AA3691123DADA57DAA4FE165D5C75894505B876BA6E4'] * 100000)
     },
     fetchPool(poolID, funcRes) {
       this.axios
@@ -475,8 +476,12 @@ export default {
     },
   },
   computed: {
+    mstr_div_b() { // me bought
+      let curPrice = this.rayd_mstr / 0.00229899
+      return Math.round(curPrice / this.price.wbtc.cex * 10000) / 100
+    },
     mstr_div() {
-      let curPrice = this.rayd_mstr / 0.00226157
+      let curPrice = this.rayd_mstr / 0.00246297
       return Math.round(curPrice / this.price.wbtc.cex * 10000) / 100
     },
     st_atom_div() {
@@ -504,11 +509,11 @@ export default {
       return Math.round(rev / liq * 10000) / 100
     },
     cm_period() {
-      let end = new Date('2025-12-26T16:00')
+      let end = new Date('2026-03-27T16:00')
       return (end - this.now) / 3600 / 24 / 1000  // days
     },
     cm_period2() {
-      let end = new Date('2026-03-27T16:00')
+      let end = new Date('2026-06-26T16:00')
       return (end - this.now) / 3600 / 24 / 1000  // days
     },
     btc_cm_div() {

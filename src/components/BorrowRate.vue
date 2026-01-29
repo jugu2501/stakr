@@ -49,9 +49,10 @@ export default {
       this.bShowMore = !this.bShowMore
     },
     fetch() {
+      console.log('ora')
 //      this.fetchAave()
       this.fetchComp()
-      this.fetchVenus()
+//      this.fetchVenus()
     },
     borrow(id) {
       if(this.aaveData && this.aaveData.reserves) {
