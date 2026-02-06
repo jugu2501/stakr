@@ -41,13 +41,6 @@
       <br><br><br>
     </div>
     <div class="omo_block">
-      == Levana funding ========<br>
-      [BTC] <a class="s_red">{{btcFee_le}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;
-      [wBTC] <a class="s_red">{{wbtcFee_le}}%</a><br>
-      [Atom] <a class="s_red">{{atomFee_le}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;
-      [Osmo] <a class="s_red">{{osmoFee}}%</a><br>
-      [ETH] <a class="s_red">{{ethFee_le}}%</a><br>
-      <br>
       == Binance funding ========<br>
       [BTC] <a class="s_red">{{btcFee}}%</a>&nbsp;&nbsp;&nbsp;&nbsp;
       [ETH] <a class="s_red">{{ethFee}}%</a><br>
@@ -314,29 +307,6 @@ export default {
       let addr = 'XsP7xzNPvEHS1m6qfanPUGjNmdnmsLKEoNAnHjdxxyZ'
       this.rayd_mstr = Math.round(res.data.data[addr] *100) / 100
     },
-    fetchLevana() {
-      this.axios
-        .get('https://querier-mainnet.levana.finance/v1/perps/markets?network=osmosis-mainnet&factory=osmo1ssw6x553kzqher0earlkwlxasfm2stnl3ms3ma2zz4tnajxyyaaqlucd45')
-        .then(this.resLevana)
-        .catch(this.errRes)
-    },
-    resLevana(res) {
-        let markets = res.data.markets
-        let tmpObj = markets.find(a => a.status.base == 'ATOM')
-        this.atomFee_le = Math.round(tmpObj.status.short_funding * 1000) / 10
-        
-        tmpObj = markets.find(a => a.status.base == 'OSMO')
-        this.osmoFee = Math.round(tmpObj.status.short_funding * 1000) / 10
-        
-        tmpObj = markets.find(a => a.status.base == 'BTC')
-        this.btcFee_le = Math.round(tmpObj.status.short_funding * 1000) / 10
-        
-        tmpObj = markets.find(a => a.status.base == 'wBTC')
-        this.wbtcFee_le = Math.round(tmpObj.status.short_funding * 1000) / 10
-        
-        tmpObj = markets.find(a => a.status.base == 'axlETH')
-        this.ethFee_le = Math.round(tmpObj.status.short_funding * 1000) / 10
-    },
     fetchTest() {
       return
       let data = JSON.stringify({
@@ -393,7 +363,6 @@ export default {
       
       this.fetchPrior()
       this.fetchRaydium()
-      this.fetchLevana()
       
       this.$refs.borrow_rate.fetch()
       
@@ -481,7 +450,7 @@ export default {
       return Math.round(curPrice / this.price.wbtc.cex * 10000) / 100
     },
     mstr_div() {
-      let curPrice = this.rayd_mstr / 0.00246297
+      let curPrice = this.rayd_mstr / 0.00195563
       return Math.round(curPrice / this.price.wbtc.cex * 10000) / 100
     },
     st_atom_div() {
